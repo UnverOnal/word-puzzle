@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GameScene
   m_EditorClassIdentifier: 
   type: 0
-  loadingScene: {fileID: 11400000, guid: 76157b25a96463c4cac668dc7db468d3, type: 2}
+  loadingScene: {fileID: 0}

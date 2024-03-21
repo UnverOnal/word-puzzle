@@ -17,8 +17,8 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
-        _poolParent = new GameObject("Pool");
-        _pool = _poolService.GetPoolFactory().CreatePool(() => GameObject.CreatePrimitive(PrimitiveType.Cube), false, 5);
+        // _poolParent = new GameObject("Pool");
+        // _pool = _poolService.GetPoolFactory().CreatePool(() => GameObject.CreatePrimitive(PrimitiveType.Cube), false, 5);
     }
 
     private async void Update()
