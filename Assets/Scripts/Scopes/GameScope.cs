@@ -1,5 +1,6 @@
 using UI;
 using UI.Screens;
+using UI.Screens.Game;
 using UI.Screens.Home;
 using UI.Screens.LevelSelection;
 using UnityEngine;
@@ -10,9 +11,9 @@ namespace Scopes
 {
     public class GameScope : LifetimeScope
     {
-        [SerializeField] private HomeResources homeResources;
-        [SerializeField] private LevelSelectionResources levelSelectionResources;
-        [SerializeField] private LevelSelectionAssets levelSelectionAssets;
+        [SerializeField] private HomeScreenResources homeScreenResources;
+        [SerializeField] private LevelScreenResources levelScreenResources;
+        [SerializeField] private LevelScreenAssets levelScreenAssets;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -23,12 +24,14 @@ namespace Scopes
 
         private void RegisterScreens(IContainerBuilder builder)
         {
-            builder.RegisterInstance(homeResources);
-            builder.Register<IScreenPresenter ,HomePresenter>(Lifetime.Singleton);
+            builder.RegisterInstance(homeScreenResources);
+            builder.Register<IScreenPresenter ,HomeScreenPresenter>(Lifetime.Singleton);
 
-            builder.RegisterInstance(levelSelectionResources);
-            builder.RegisterInstance(levelSelectionAssets);
-            builder.Register<IScreenPresenter ,LevelSelectionPresenter>(Lifetime.Singleton);
+            builder.RegisterInstance(levelScreenResources);
+            builder.RegisterInstance(levelScreenAssets);
+            builder.Register<IScreenPresenter ,LevelScreenPresenter>(Lifetime.Singleton);
+
+            builder.Register<IScreenPresenter, GameScreenPresenter>(Lifetime.Singleton);
         }
     }
 }

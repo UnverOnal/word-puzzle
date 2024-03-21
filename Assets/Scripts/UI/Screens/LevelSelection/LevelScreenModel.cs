@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace UI.Screens.LevelSelection
 {
-    public class LevelSelectionModel
+    public class LevelScreenModel
     {
         public List<TempData> LevelDatas { get; }
 
-        public LevelSelectionModel()
+        public LevelScreenModel()
         {
             LevelDatas = GetLevelData();
         }

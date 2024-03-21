@@ -2,7 +2,7 @@ using UnityEngine.UI;
 
 namespace UI.Screens.Home
 {
-    public class HomeResources : ScreenResources
+    public class HomeScreenResources : ScreenResources
     {
         public Button levelsButton;
     }

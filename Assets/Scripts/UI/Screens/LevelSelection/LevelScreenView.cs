@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace UI.Screens.LevelSelection
 {
-    public class LevelSelectionView : ScreenView
+    public class LevelScreenView : ScreenView
     {
         private readonly GameObject _levelUiPrefab;
-        private readonly LevelSelectionResources _levelSelectionResources;
+        private readonly LevelScreenResources _resources;
 
         private readonly ObjectPool<GameObject> _levelUiPool;
 
-        public LevelSelectionView(ScreenResources screenResources, GameObject levelUiPrefab, IPoolService poolService) : base(screenResources)
+        public LevelScreenView(ScreenResources screenResources, GameObject levelUiPrefab, IPoolService poolService) : base(screenResources)
         {
             _levelUiPrefab = levelUiPrefab;
-            _levelSelectionResources = (LevelSelectionResources)screenResources;
+            _resources = (LevelScreenResources)screenResources;
 
             var poolFactory = poolService.GetPoolFactory();
             _levelUiPool = poolFactory.CreatePool(LevelUiCreator);
@@ -42,7 +42,7 @@ namespace UI.Screens.LevelSelection
 
         private GameObject LevelUiCreator()
         {
-            var contentTransform = _levelSelectionResources.contentTransform;
+            var contentTransform = _resources.contentTransform;
             var levelUi = Object.Instantiate(_levelUiPrefab, parent: contentTransform);
             return levelUi;
         }
