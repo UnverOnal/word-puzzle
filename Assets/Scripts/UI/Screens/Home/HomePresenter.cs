@@ -16,7 +16,7 @@ namespace UI.Screens.Home
 
         public void Initialize()
         {
-            _homeResources.levelsButton.onClick.AddListener(()=> _homeView.Disable());
+            _homeResources.levelsButton.onClick.AddListener(() => _homeView.Disable());
         }
     }
 }

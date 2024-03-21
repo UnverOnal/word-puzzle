@@ -9,14 +9,14 @@ namespace UI.Screens
             _panel = new Panel(screenResources.screen, screenResources.screenGameObject);
         }
 
-        public void Enable(bool instant = false)
+        public void Enable()
         {
-            _panel.EnablePanel(instant:instant);
+            _panel.EnablePanel(instant:false);
         }
 
-        public void Disable(bool instant = false)
+        public void Disable()
         {
-            _panel.DisablePanel(instant : instant);
+            _panel.DisablePanel(instant : false);
         }
     }
 }
