@@ -13,6 +13,8 @@ namespace Scopes
         
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterEntryPoint<GameManager>();
+            
             builder.RegisterInstance(sceneDataContainer);
             
             InstallServices(builder);

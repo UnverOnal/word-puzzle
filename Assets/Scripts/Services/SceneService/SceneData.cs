@@ -4,9 +4,8 @@ namespace Services.SceneService
 {
     public enum SceneType
     {
-        MenuScene,
-        LoadingScene,
-        GameScene
+        GameScene,
+        LoadingScene
     }
 
     [CreateAssetMenu(fileName = "SceneData", menuName = "ScriptableObjects/SceneData")]
