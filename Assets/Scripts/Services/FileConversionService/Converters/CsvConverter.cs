@@ -7,17 +7,14 @@ using UnityEngine;
 
 namespace Services.FileConversionService.Converters
 {
-    public class CsvConverter : Converter, IConverter
+    public class CsvConverter : IConverter
     {
-        public CsvConverter(TextAsset textAsset) : base(textAsset)
-        {
-        }
-
-        public List<T> GetDataCollection<T>() where T : new()
+        public List<T> GetDataCollection<T>(TextAsset textAsset) where T : new()
         {
             var dataCollection = new List<T>();
+            var content = textAsset.text;
 
-            using var reader = new StringReader(fileData);
+            using var reader = new StringReader(content);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Read();
             csv.ReadHeader();
@@ -27,9 +24,10 @@ namespace Services.FileConversionService.Converters
             return dataCollection;
         }
         
-        public T GetData<T>() where T : new()
+        public T GetData<T>(TextAsset textAsset) where T : new()
         {
-            using var reader = new StringReader(fileData);
+            var content = textAsset.text;
+            using var reader = new StringReader(content);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Read();
             csv.ReadHeader();

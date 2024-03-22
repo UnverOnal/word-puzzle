@@ -29,5 +29,10 @@ namespace UI.Screens.Game
         {
             _levelEndPresenter.Initialize();
         }
+
+        public void UpdateLevelTitle(string title)
+        {
+            _screenView.SetLevelTitle(title);
+        }
     }
 }

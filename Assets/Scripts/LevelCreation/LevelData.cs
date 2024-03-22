@@ -5,18 +5,18 @@ namespace LevelCreation
     public class LevelData
     {
         public string title;
-        public List<Tile> tiles;
+        public List<TileData> tiles;
     }
 
-    public class Tile
+    public class TileData
     {
         public int id;
-        public Position position;
+        public TilePositionData position;
         public string character;
         public List<int> children;
     }
 
-    public class Position
+    public class TilePositionData
     {
         public float x;
         public float y;

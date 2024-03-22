@@ -1,25 +1,23 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Services.FileConversionService.Converters
 {
-    public class JsonConverter : Converter, IConverter
+    public class JsonConverter : IConverter
     {
-        public JsonConverter(TextAsset textAsset) : base(textAsset)
+        /// <summary>
+        /// If the data is a collection...
+        /// </summary>
+        public List<T> GetDataCollection<T>(TextAsset textAsset) where T : new()
         {
-        }
-
-        public List<T> GetDataCollection<T>() where T : new()
-        {
-            var dataCollection = GetData<List<T>>();
+            var dataCollection = GetData<List<T>>(textAsset);
             return dataCollection;
         }
         
-        public T GetData<T>() where T : new()
+        public T GetData<T>(TextAsset textAsset) where T : new()
         {
-            var content = fileData;
+            var content = textAsset.text;
             var convertedObject = JsonConvert.DeserializeObject<T>(content);
             return convertedObject;
         }

@@ -1,6 +1,4 @@
 
-using UnityEngine;
-
 namespace Services.FileConversionService
 {
     public enum ConverterType
@@ -10,6 +8,6 @@ namespace Services.FileConversionService
     }
     public interface IFileConversionService
     {
-        IConverter GetConverter(ConverterType type, TextAsset textAsset);
+        IConverter GetConverter(ConverterType type);
     }
 }

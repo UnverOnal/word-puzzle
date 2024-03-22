@@ -25,6 +25,7 @@ namespace Scopes
             RegisterScreens(builder);
 
             builder.RegisterInstance(levelAssets);
+            builder.Register<LevelPresenter>(Lifetime.Singleton);
         }
 
         private void RegisterScreens(IContainerBuilder builder)
@@ -37,7 +38,7 @@ namespace Scopes
             builder.Register<IScreenPresenter ,LevelScreenPresenter>(Lifetime.Singleton);
 
             builder.RegisterInstance(gameScreenResources);
-            builder.Register<IScreenPresenter, GameScreenPresenter>(Lifetime.Singleton);
+            builder.Register<GameScreenPresenter>(Lifetime.Singleton).AsSelf().As<IScreenPresenter>();
         }
     }
 }

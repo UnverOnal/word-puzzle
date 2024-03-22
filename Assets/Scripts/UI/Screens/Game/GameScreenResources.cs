@@ -11,6 +11,8 @@ namespace UI.Screens.Game
         public Button undoButton;
         public Button submitButton;
         public TextMeshProUGUI inGameScore;
+        public TextMeshProUGUI levelTitleText;
+        public Transform correctWordsParent;
 
         public LevelEndResources levelEndResources;
     }

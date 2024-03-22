@@ -12,4 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 907781a1ea8ece04bbcc6f6f32e907e9, type: 3}
   m_Name: LevelAssets
   m_EditorClassIdentifier: 
-  levelDataFiles: []
+  levelDataFiles:
+  - {fileID: 4900000, guid: 95497a92ac4fe0a469775b6301bbfeb3, type: 3}
+  - {fileID: 4900000, guid: b79110bef8485b74c8e7f260431235f5, type: 3}
+  - {fileID: 4900000, guid: f2393a4942d33af4c91bfe7e4d2cbc91, type: 3}
+  - {fileID: 4900000, guid: 56a70f9f49a720744b4cf03a1e322a72, type: 3}
+  - {fileID: 4900000, guid: 1bfbba52f27276a41ad820bb6d93e849, type: 3}
+  - {fileID: 4900000, guid: 9b44eab7323529c49bbd39b31ee62e6e, type: 3}
+  - {fileID: 4900000, guid: a597fa8c7344ee14d958c1f18fb99090, type: 3}
+  - {fileID: 4900000, guid: 929b33c5793ac1e4097a11623dcb1d90, type: 3}
+  - {fileID: 4900000, guid: dfc8b24d5feb2ec4095ff83202a99847, type: 3}
+  - {fileID: 4900000, guid: 015c3f1eb9ba831449e59deec36f581d, type: 3}
+  - {fileID: 4900000, guid: ece98223d9369d943aafe9fe950f89be, type: 3}
+  - {fileID: 4900000, guid: ffededd389fe9564d900911211adcfae, type: 3}
+  - {fileID: 4900000, guid: 4a373c3e99230ab44aad8155f8e2d037, type: 3}
+  - {fileID: 4900000, guid: eb49e6a1771c46e4383463f8ac483e39, type: 3}
+  - {fileID: 4900000, guid: 9a5c5162420dbcb45b6d23933e060581, type: 3}
+  - {fileID: 4900000, guid: 323693e4acd35a64dac0ffb19535e73d, type: 3}
+  - {fileID: 4900000, guid: 30f5b071551f8844ba36774266925d3a, type: 3}
+  - {fileID: 4900000, guid: 147a2db85284e6a40808c292be945c9b, type: 3}
+  - {fileID: 4900000, guid: 39a678564d5cb5542b41c192a0f509bc, type: 3}
+  - {fileID: 4900000, guid: 1c6c156cbbfcff54f8999c63effa8b99, type: 3}
+  tilePrefab: {fileID: 4974587192865825903, guid: 740aae27061d94540a7273e3c6237a38, type: 3}
+  emptyTilePrefab: {fileID: 1706226049014406229, guid: a3d467289b0303e4e84cbe85a383066d, type: 3}

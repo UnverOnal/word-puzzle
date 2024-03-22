@@ -14,5 +14,10 @@ namespace UI.Screens.Game
             var scoreText = "Score : " + score;
             _resources.inGameScore.text = scoreText;
         }
+
+        public void SetLevelTitle(string title)
+        {
+            _resources.levelTitleText.text = title.ToString();
+        }
     }
 }

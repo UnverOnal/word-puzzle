@@ -15,20 +15,23 @@ public class Test : MonoBehaviour
     [Inject] private ISceneService _sceneService;
     [Inject] private IInputService _inputService;
     [Inject] private IPoolService _poolService;
-    [Inject] private IFileConversionService _fileConversionService;
-    [SerializeField] private TextAsset textAsset;
+    [Inject] private LevelPresenter _levelPresenter;
     private ObjectPool<GameObject> _pool;
     private GameObject _poolParent;
 
     private void Start()
     {
-        // _poolParent = new GameObject("Pool");
-        // _pool = _poolService.GetPoolFactory().CreatePool(() => GameObject.CreatePrimitive(PrimitiveType.Cube), false, 5);
-
-        // var converter = _fileConversionService.GetConverter(ConverterType.JsonConverter, textAsset);
-        // var dataCollection = converter.GetDataCollection<LevelData>();
-        // Debug.Log(dataCollection[0].tiles[0].character);
         
+        _levelPresenter.CreateLevel();
+        // var sprite = GetComponent<SpriteRenderer>().sprite;
+        // Debug.Log(sprite.bounds.size * 12.5f);
+        //
+        // var nextTileDistance = sprite.bounds.size.x * transform.localScale.x;
+        // var newOne = Instantiate(gameObject);
+        // Destroy(newOne.GetComponent<Test>());
+        // newOne.transform.position += transform.position + Vector3.right * nextTileDistance;
+
+
     }
 
     private async void Update()

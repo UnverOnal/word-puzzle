@@ -6,5 +6,7 @@ namespace LevelCreation
     public class LevelAssets : ScriptableObject
     {
         public TextAsset[] levelDataFiles;
+        public GameObject tilePrefab;
+        public GameObject emptyTilePrefab;
     }
 }
