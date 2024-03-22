@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using LevelCreation;
+using Services.FileConversionService;
 using Services.InputService;
 using Services.PoolingService;
 using Services.SceneService;
@@ -12,6 +15,8 @@ public class Test : MonoBehaviour
     [Inject] private ISceneService _sceneService;
     [Inject] private IInputService _inputService;
     [Inject] private IPoolService _poolService;
+    [Inject] private IFileConversionService _fileConversionService;
+    [SerializeField] private TextAsset textAsset;
     private ObjectPool<GameObject> _pool;
     private GameObject _poolParent;
 
@@ -19,6 +24,11 @@ public class Test : MonoBehaviour
     {
         // _poolParent = new GameObject("Pool");
         // _pool = _poolService.GetPoolFactory().CreatePool(() => GameObject.CreatePrimitive(PrimitiveType.Cube), false, 5);
+
+        // var converter = _fileConversionService.GetConverter(ConverterType.JsonConverter, textAsset);
+        // var dataCollection = converter.GetDataCollection<LevelData>();
+        // Debug.Log(dataCollection[0].tiles[0].character);
+        
     }
 
     private async void Update()

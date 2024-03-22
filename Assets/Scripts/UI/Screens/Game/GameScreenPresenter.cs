@@ -18,7 +18,6 @@ namespace UI.Screens.Game
 
         public void Initialize()
         {
-            Debug.Log(GetType());
         }
 
         public void UpdateScore(int score)

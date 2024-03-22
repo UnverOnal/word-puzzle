@@ -1,3 +1,4 @@
+using LevelCreation;
 using UI;
 using UI.Screens;
 using UI.Screens.Game;
@@ -13,13 +14,17 @@ namespace Scopes
     {
         [SerializeField] private HomeScreenResources homeScreenResources;
         [SerializeField] private LevelScreenResources levelScreenResources;
+        [SerializeField] private GameScreenResources gameScreenResources;
         [SerializeField] private LevelScreenAssets levelScreenAssets;
+        [SerializeField] private LevelAssets levelAssets;
         
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<UiManager>();
             
             RegisterScreens(builder);
+
+            builder.RegisterInstance(levelAssets);
         }
 
         private void RegisterScreens(IContainerBuilder builder)
@@ -31,6 +36,7 @@ namespace Scopes
             builder.RegisterInstance(levelScreenAssets);
             builder.Register<IScreenPresenter ,LevelScreenPresenter>(Lifetime.Singleton);
 
+            builder.RegisterInstance(gameScreenResources);
             builder.Register<IScreenPresenter, GameScreenPresenter>(Lifetime.Singleton);
         }
     }
