@@ -1,3 +1,4 @@
+using Dictionary;
 using GameManagement;
 using Services.CommandService;
 using Services.FileConversionService;
@@ -14,11 +15,15 @@ namespace Scopes
     {
         [SerializeField] private SceneDataContainer sceneDataContainer;
         [SerializeField] private GameSettings gameSettings;
+        [SerializeField] private DictionaryData dictionaryData;
         
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<GameManager>();
-            
+
+            builder.Register<DictionaryPreprocessor>(Lifetime.Singleton);
+
+            builder.RegisterInstance(dictionaryData);
             builder.RegisterInstance(sceneDataContainer);
             builder.RegisterInstance(gameSettings);
             

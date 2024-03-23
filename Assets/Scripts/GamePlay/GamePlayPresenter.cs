@@ -45,9 +45,11 @@ namespace GamePlay
                 return;
 
             var tile = GetSelectedTile(selectedObject);
-            
             var moveCommand = _moveCommandPool.Get();
-            var targetPosition = _levelPresenter.FormingTiles[0].GameObject.transform.position;
+            
+            var formingAreaTiles = _levelPresenter.FormingTiles;
+            var targetPosition =formingAreaTiles[_gamePlayModel.FormingAreaIndex].GameObject.transform.position;
+            _gamePlayModel.IncreaseFormingAreaIndex();
             moveCommand.SetMoveData(tile, targetPosition);
 
             _commandInvoker.ExecuteCommand(moveCommand);
@@ -56,11 +58,13 @@ namespace GamePlay
         public void Undo()
         {
             _commandInvoker.UndoCommand();
+            _gamePlayModel.DecreaseFormingAreaIndex();
         }
 
         public void UndoAll()
         {
             _commandInvoker.UndoCommandAll();
+            _gamePlayModel.ResetFormingAreaIndex();
         }
 
         public void Submit()
@@ -69,7 +73,7 @@ namespace GamePlay
             _commandInvoker.Reset();
         }
 
-        private Tile GetSelectedTile(GameObject gameObject)
+        private LetterTile GetSelectedTile(GameObject gameObject)
         {
             var tiles = _levelPresenter.Tiles;
             for (int i = 0; i < tiles.Count; i++)

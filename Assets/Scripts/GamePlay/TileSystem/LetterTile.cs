@@ -5,21 +5,19 @@ using UnityEngine;
 
 namespace GamePlay.TileSystem
 {
-    public class Tile
+    public class LetterTile : Tile
     {
-        public int ID => _tileData.id;
+        public override int ID => _tileData.id;
         
-        public GameObject GameObject { get; }
-        
-        private readonly List<Tile> _childrenTiles = new();
-        private readonly List<Tile> _parentTiles = new();
+        private readonly List<LetterTile> _childrenTiles = new();
+        private readonly List<LetterTile> _parentTiles = new();
 
         private TileData _tileData;
 
         private readonly SpriteRenderer _spriteRenderer;
         private readonly TextMeshProUGUI _charText;
 
-        public Tile(GameObject tilePrefab, Transform poolTransform)
+        public LetterTile(GameObject tilePrefab, Transform poolTransform)
         {
             GameObject = Object.Instantiate(tilePrefab, poolTransform);
             _charText = GameObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -42,7 +40,7 @@ namespace GamePlay.TileSystem
             _charText.text = _tileData.character;
         }
         
-        public void AddChildren(List<Tile> allTiles)
+        public void AddChildren(List<LetterTile> allTiles)
         {
             var childrenIndices = new List<int>(_tileData.children);
             for (int i = 0; i < allTiles.Count; i++)
@@ -61,9 +59,9 @@ namespace GamePlay.TileSystem
             }
         }
 
-        public void RemoveChildren(out List<Tile> childrenToBeRemoved)
+        public void RemoveChildren(out List<LetterTile> childrenToBeRemoved)
         {
-            childrenToBeRemoved = new List<Tile>(_childrenTiles);
+            childrenToBeRemoved = new List<LetterTile>(_childrenTiles);
             while (_childrenTiles.Count > 0)
             {
                 var tile = _childrenTiles[^1];
@@ -71,29 +69,29 @@ namespace GamePlay.TileSystem
             }
         }
 
-        public void AddChild(Tile tile)
+        public void AddChild(LetterTile letterTile)
         {
-            _childrenTiles.Add(tile);
-            tile.AddParent(this);
+            _childrenTiles.Add(letterTile);
+            letterTile.AddParent(this);
         }
 
-        public void RemoveChild(Tile tile)
+        public void RemoveChild(LetterTile letterTile)
         {
-            _childrenTiles.Remove(tile);
-            tile.RemoveParent(this);
+            _childrenTiles.Remove(letterTile);
+            letterTile.RemoveParent(this);
         }
 
-        private void AddParent(Tile tile)
+        private void AddParent(LetterTile letterTile)
         {
-            _parentTiles.Add(tile);
+            _parentTiles.Add(letterTile);
             
             if(_parentTiles.Count > 0)
                 MakeInteractable(false);
         }
 
-        private void RemoveParent(Tile tile)
+        private void RemoveParent(LetterTile letterTile)
         {
-            _parentTiles.Remove(tile);
+            _parentTiles.Remove(letterTile);
             
             if(_parentTiles.Count < 1)
                 MakeInteractable(true);

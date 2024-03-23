@@ -13,10 +13,10 @@ namespace LevelCreation
         public List<LevelData> LevelDatas => _levelModel.LevelDatas;
         public LevelData CurrentLevelData => _levelModel.CurrentLevel;
 
-        public List<Tile> Tiles => _levelModel.Tiles;
-        public List<EmptyTile> FormingTiles => _levelModel.FormingTiles;
+        public List<LetterTile> Tiles => _levelModel.Tiles;
+        public List<BlankTile> FormingTiles => _levelModel.FormingTiles;
 
-        private readonly ObjectPool<Tile> _tilePool;
+        private readonly ObjectPool<LetterTile> _tilePool;
 
         private readonly LevelModel _levelModel;
         private readonly LevelView _levelView;
@@ -35,7 +35,7 @@ namespace LevelCreation
 
             var tileParent = new GameObject("TileParent");
             _tilePool = poolService.GetPoolFactory()
-                .CreatePool(() => new Tile(levelAssets.tilePrefab, tileParent.transform));
+                .CreatePool(() => new LetterTile(levelAssets.tilePrefab, tileParent.transform));
         }
 
         public void CreateLevel()

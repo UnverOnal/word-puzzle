@@ -17,19 +17,19 @@ namespace GamePlay
 
         private float _duration;
         
-        private Tile _tile;
+        private LetterTile _letterTile;
 
-        private readonly List<Tile> _childrenTiles = new();
+        private readonly List<LetterTile> _childrenTiles = new();
 
         public MoveCommand(MoveData moveData)
         {
             _moveData = moveData;
         }
 
-        public void SetMoveData(Tile tile, Vector3 targetPosition)
+        public void SetMoveData(LetterTile letterTile, Vector3 targetPosition)
         {
-            _tile = tile;
-            _transform = tile.GameObject.transform;
+            _letterTile = letterTile;
+            _transform = letterTile.GameObject.transform;
             _targetPosition = targetPosition;
             _initialPosition = _transform.position;
 
@@ -38,7 +38,7 @@ namespace GamePlay
         
         public void Execute()
         {
-            _tile.RemoveChildren(out var childrenRemoved);
+            _letterTile.RemoveChildren(out var childrenRemoved);
             _childrenTiles.AddRange(childrenRemoved);
             _transform.DOMove(_targetPosition, _duration).SetEase(_moveData.ease);
         }
@@ -48,7 +48,7 @@ namespace GamePlay
             for (int i = 0; i < _childrenTiles.Count; i++)
             {
                 var childTile = _childrenTiles[i];
-                _tile.AddChild(childTile);
+                _letterTile.AddChild(childTile);
             }
             _childrenTiles.Clear();
             _transform.DOMove(_initialPosition, _duration).SetEase(_moveData.ease);

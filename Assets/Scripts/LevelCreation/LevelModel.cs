@@ -9,8 +9,8 @@ namespace LevelCreation
         public List<LevelData> LevelDatas { get; private set; }
         public LevelData CurrentLevel => LevelDatas[_levelCount];
         
-        public List<Tile> Tiles { get; }
-        public List<EmptyTile> FormingTiles { get; set; }
+        public List<LetterTile> Tiles { get; }
+        public List<BlankTile> FormingTiles { get; set; }
 
         private readonly IConverter _jsonConverter;
         private readonly LevelAssets _levelAssets;
@@ -23,7 +23,7 @@ namespace LevelCreation
             _jsonConverter = fileConversionService.GetConverter(ConverterType.JsonConverter);
             _levelAssets = levelAssets;
 
-            Tiles = new List<Tile>();
+            Tiles = new List<LetterTile>();
         }
 
         public void CreateLevelData()

@@ -19,20 +19,20 @@ namespace LevelCreation
             _emptyTileParent = new GameObject("FormingArea").transform;
         }
 
-        public void SetTile(Tile tile)
+        public void SetTile(LetterTile letterTile)
         {
-            tile.SetPosition();
-            tile.SetChar();
+            letterTile.SetPosition();
+            letterTile.SetChar();
         }
 
-        public List<EmptyTile> SetFormingArea(Vector3 initialPosition)
+        public List<BlankTile> SetFormingArea(Vector3 initialPosition)
         {
-            var formingArea = new List<EmptyTile>();
+            var formingArea = new List<BlankTile>();
 
             float? nextTileDistance = null;
             for (var i = 0; i < _gameSettings.formingAreaSize; i++)
             {
-                var emptyTile = new EmptyTile(_levelAssets.emptyTilePrefab, _emptyTileParent.transform);
+                var emptyTile = new BlankTile(_levelAssets.emptyTilePrefab, _emptyTileParent.transform);
                 nextTileDistance ??= CalculateFormingTileDistance(emptyTile);
 
                 var position = CalculateFormingTilePosition(i, initialPosition, nextTileDistance.Value);
@@ -54,7 +54,7 @@ namespace LevelCreation
             return position;
         }
 
-        private float CalculateFormingTileDistance(EmptyTile tile)
+        private float CalculateFormingTileDistance(BlankTile tile)
         {
             var distance = tile.Sprite.bounds.size.x * tile.GameObject.transform.localScale.x;
             return distance;
