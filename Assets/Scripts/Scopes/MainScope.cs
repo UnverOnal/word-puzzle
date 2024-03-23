@@ -1,4 +1,5 @@
 using GameManagement;
+using Services.CommandService;
 using Services.FileConversionService;
 using Services.InputService;
 using Services.PoolingService;
@@ -33,6 +34,8 @@ namespace Scopes
             builder.RegisterEntryPoint<InputEntryPoint>();
 
             builder.Register<IFileConversionService, FileConversionService>(Lifetime.Singleton);
+
+            builder.Register<ICommandService, CommandService>(Lifetime.Singleton);
         }
     }
 }
