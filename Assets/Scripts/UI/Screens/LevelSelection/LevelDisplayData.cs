@@ -1,6 +1,6 @@
 namespace UI.Screens.LevelSelection
 {
-    public struct TempData
+    public struct LevelDisplayData
     {
         public string title;
         public int score;

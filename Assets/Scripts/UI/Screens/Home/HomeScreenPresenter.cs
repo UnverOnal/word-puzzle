@@ -12,13 +12,13 @@ namespace UI.Screens.Home
         public HomeScreenPresenter(HomeScreenResources resources, GameStatePresenter statePresenter) : base(statePresenter)
         {
             _resources = resources;
-            _screenView = new HomeScreenView(resources);
+            _screenView = new HomeScreenView(resources, statePresenter);
         }
 
         public void Initialize()
         {
             SetStateAction();
-            _resources.levelsButton.onClick.AddListener(() => _screenView.Disable());
+            _resources.levelsButton.onClick.AddListener(_screenView.OnLevelsButtonClicked);
         }
 
         protected override void OnStateUpdate(GameState.GameState gameState)

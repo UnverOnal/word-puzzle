@@ -6,7 +6,8 @@ namespace LevelCreation
 {
     public class LevelModel
     {
-        public LevelData CurrentLevel => _levelDatas[_levelCount];
+        public List<LevelData> LevelDatas { get; private set; }
+        public LevelData CurrentLevel => LevelDatas[_levelCount];
         
         public List<Tile> Tiles { get; }
         public List<EmptyTile> FormingTiles { get; set; }
@@ -14,7 +15,6 @@ namespace LevelCreation
         private readonly IConverter _jsonConverter;
         private readonly LevelAssets _levelAssets;
         
-        private List<LevelData> _levelDatas;
 
         private int _levelCount;
 
@@ -28,13 +28,13 @@ namespace LevelCreation
 
         public void CreateLevelData()
         {
-            _levelDatas = new List<LevelData>();
+            LevelDatas = new List<LevelData>();
             var levelDataFiles = _levelAssets.levelDataFiles;
             for (int i = 0; i < levelDataFiles.Length; i++)
             {
                 var file = levelDataFiles[i];
                 var convertedData = _jsonConverter.GetData<LevelData>(file);
-                _levelDatas.Add(convertedData);
+                LevelDatas.Add(convertedData);
             }
         }
 

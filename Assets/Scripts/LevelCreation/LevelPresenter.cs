@@ -11,24 +11,19 @@ namespace LevelCreation
 {
     public class LevelPresenter
     {
-        private readonly LevelAssets _levelAssets;
-        private readonly GameScreenPresenter _gameScreenPresenter;
-
+        public List<LevelData> LevelDatas => _levelModel.LevelDatas;
+        
         private readonly ObjectPool<Tile> _tilePool;
 
         private readonly LevelModel _levelModel;
         private readonly LevelView _levelView;
         private readonly LevelFitter _levelFitter;
-
-
+        
         [Inject]
         public LevelPresenter(GameSettings gameSettings, LevelAssets levelAssets,
             IFileConversionService fileConversionService, GameScreenPresenter gameScreenPresenter,
             IPoolService poolService)
         {
-            _levelAssets = levelAssets;
-            _gameScreenPresenter = gameScreenPresenter;
-
             _levelModel = new LevelModel(fileConversionService, levelAssets);
             _levelView = new LevelView(gameScreenPresenter, gameSettings, levelAssets);
             _levelFitter = new LevelFitter(gameSettings);
@@ -39,7 +34,7 @@ namespace LevelCreation
             _tilePool = poolService.GetPoolFactory()
                 .CreatePool(() => new Tile(levelAssets.tilePrefab, tileParent.transform));
         }
-
+        
         public void CreateLevel()
         {
             var levelData = _levelModel.CurrentLevel;

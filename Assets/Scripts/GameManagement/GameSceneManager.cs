@@ -9,19 +9,19 @@ namespace GameManagement
     public class GameSceneManager : IInitializable
     {
         private readonly UiManager _uiManager;
-        private readonly GameStatePresenter _gameStatePresenter;
+        private readonly GameStatePresenter _statePresenter;
 
         [Inject]
-        public GameSceneManager(UiManager uiManager,GameStatePresenter gameStatePresenter)
+        public GameSceneManager(UiManager uiManager,GameStatePresenter statePresenter)
         {
             _uiManager = uiManager;
-            _gameStatePresenter = gameStatePresenter;
+            _statePresenter = statePresenter;
         }
 
         public void Initialize()
         {
             _uiManager.Initialize();
-            _gameStatePresenter.UpdateGameState(GameState.GameState.Home);
+            _statePresenter.UpdateGameState(GameState.GameState.Home);
         }
     }
 }
