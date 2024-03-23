@@ -8,6 +8,7 @@ namespace GamePlay.TileSystem
     public class LetterTile : Tile
     {
         public override int ID => _tileData.id;
+        public string Character { get; private set; }
         
         private readonly List<LetterTile> _childrenTiles = new();
         private readonly List<LetterTile> _parentTiles = new();
@@ -37,6 +38,7 @@ namespace GamePlay.TileSystem
 
         public void SetChar()
         {
+            Character = _tileData.character;
             _charText.text = _tileData.character;
         }
         

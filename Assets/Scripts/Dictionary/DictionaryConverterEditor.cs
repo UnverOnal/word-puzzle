@@ -19,7 +19,6 @@ namespace Dictionary
 
             GUILayout.Space(10);
 
-            // Add a button to the Inspector GUI
             if (GUILayout.Button("Convert Dictionary to List"))
             {
                 data.ConvertDictionaryToList();

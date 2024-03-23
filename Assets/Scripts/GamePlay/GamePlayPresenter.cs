@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Generic;
+using Dictionary;
 using GameManagement;
+using GamePlay.FormingArea;
 using GamePlay.TileSystem;
 using LevelCreation;
 using Services.CommandService;
@@ -16,18 +17,22 @@ namespace GamePlay
         private readonly IInputService _inputService;
         private readonly CommandInvoker _commandInvoker;
         private readonly LevelPresenter _levelPresenter;
+        private readonly DictionaryPreprocessor _dictionaryPreprocessor;
+        private readonly FormingAreaPresenter _formingAreaPresenter;
 
-        private GamePlayModel _gamePlayModel;
+        private readonly GamePlayModel _gamePlayModel;
 
         private readonly ObjectPool<MoveCommand> _moveCommandPool;
 
         [Inject]
         public GamePlayPresenter(IInputService inputService, IPoolService poolService, ICommandService commandService,
-            LevelPresenter levelPresenter, GameSettings gameSettings)
+            LevelPresenter levelPresenter, GameSettings gameSettings, DictionaryPreprocessor dictionaryPreprocessor, FormingAreaPresenter formingAreaPresenter)
         {
             _inputService = inputService;
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
+            _dictionaryPreprocessor = dictionaryPreprocessor;
+            _formingAreaPresenter = formingAreaPresenter;
 
             _gamePlayModel = new GamePlayModel();
 
@@ -46,10 +51,9 @@ namespace GamePlay
 
             var tile = GetSelectedTile(selectedObject);
             var moveCommand = _moveCommandPool.Get();
-            
-            var formingAreaTiles = _levelPresenter.FormingTiles;
-            var targetPosition =formingAreaTiles[_gamePlayModel.FormingAreaIndex].GameObject.transform.position;
-            _gamePlayModel.IncreaseFormingAreaIndex();
+
+            var targetPosition = _formingAreaPresenter.GetNextFreePosition();
+            _formingAreaPresenter.AddLetter(tile);
             moveCommand.SetMoveData(tile, targetPosition);
 
             _commandInvoker.ExecuteCommand(moveCommand);
@@ -58,19 +62,32 @@ namespace GamePlay
         public void Undo()
         {
             _commandInvoker.UndoCommand();
-            _gamePlayModel.DecreaseFormingAreaIndex();
+            _formingAreaPresenter.RemoveLetter();
         }
 
         public void UndoAll()
         {
             _commandInvoker.UndoCommandAll();
-            _gamePlayModel.ResetFormingAreaIndex();
+            _formingAreaPresenter.Reset();
         }
 
         public void Submit()
         {
-            Debug.Log("Submit");
-            _commandInvoker.Reset();
+            var isWordCorrect = _dictionaryPreprocessor.ContainsWord(_formingAreaPresenter.Word);
+            
+            if(!isWordCorrect)
+                _commandInvoker.UndoCommandAll();
+            else
+            {
+                _commandInvoker.Reset();
+                _formingAreaPresenter.DestroyTiles();
+            }
+            
+            //Returns commands to the pool
+            while (_commandInvoker.Commands.Count > 0)
+                _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
+                
+            _formingAreaPresenter.Reset();
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)
