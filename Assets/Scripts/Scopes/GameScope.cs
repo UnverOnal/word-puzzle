@@ -1,3 +1,5 @@
+using GameManagement;
+using GameState;
 using LevelCreation;
 using UI;
 using UI.Screens;
@@ -20,12 +22,15 @@ namespace Scopes
         
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<UiManager>();
+            builder.RegisterEntryPoint<GameSceneManager>();
+            builder.Register<UiManager>(Lifetime.Singleton);
             
             RegisterScreens(builder);
 
             builder.RegisterInstance(levelAssets);
             builder.Register<LevelPresenter>(Lifetime.Singleton);
+
+            builder.Register<GameStatePresenter>(Lifetime.Singleton);
         }
 
         private void RegisterScreens(IContainerBuilder builder)
