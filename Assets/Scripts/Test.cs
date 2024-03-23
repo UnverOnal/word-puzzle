@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
     private void Start()
     {
         
-        // _levelPresenter.CreateLevel();
+        _levelPresenter.CreateLevel();
         // var sprite = GetComponent<SpriteRenderer>().sprite;
         // Debug.Log(sprite.bounds.size * 12.5f);
         //

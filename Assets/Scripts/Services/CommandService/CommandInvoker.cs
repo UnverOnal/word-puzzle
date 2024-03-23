@@ -25,6 +25,12 @@ public class CommandInvoker
             activeCommand.Undo();
         }
     }
+    
+    public void UndoCommandAll()
+    {
+        while (_undoStack.Count > 0)
+            UndoCommand();
+    }
 
     public void RedoCommand()
     {

@@ -45,7 +45,7 @@ namespace Services.InputService
             if(OnItemPicked == null)
                 return;
 
-            _pickedGameObject = _inputTracker.GetSelectedGameObject();
+            _pickedGameObject = _inputTracker.GetSelectedGameObject2D();
             if(_pickedGameObject != null)
                 OnItemPicked.Invoke(_pickedGameObject);
         }

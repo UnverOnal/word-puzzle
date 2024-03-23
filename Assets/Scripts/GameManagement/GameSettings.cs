@@ -1,3 +1,4 @@
+using GamePlay;
 using UnityEngine;
 
 namespace GameManagement
@@ -9,5 +10,6 @@ namespace GameManagement
         public Vector3 cameraPositionOffset;
         public Vector3 formingAreaOffset;
         public int formingAreaSize;
+        public MoveData moveData;
     }
 }

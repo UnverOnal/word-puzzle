@@ -9,20 +9,21 @@ namespace GamePlay.TileSystem
     {
         public int ID => _tileData.id;
         
+        public GameObject GameObject { get; }
+        
         private readonly List<Tile> _childrenTiles = new();
         private readonly List<Tile> _parentTiles = new();
 
         private TileData _tileData;
 
-        private readonly GameObject _gameObject;
         private readonly SpriteRenderer _spriteRenderer;
         private readonly TextMeshProUGUI _charText;
 
         public Tile(GameObject tilePrefab, Transform poolTransform)
         {
-            _gameObject = Object.Instantiate(tilePrefab, poolTransform);
-            _charText = _gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            _spriteRenderer = _gameObject.GetComponent<SpriteRenderer>();
+            GameObject = Object.Instantiate(tilePrefab, poolTransform);
+            _charText = GameObject.GetComponentInChildren<TextMeshProUGUI>();
+            _spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
         }
 
         public void SetTileData(TileData tileData)
@@ -33,7 +34,7 @@ namespace GamePlay.TileSystem
         public void SetPosition()
         {
             var position = _tileData.position;
-            _gameObject.transform.position = new Vector3(position.x, position.y, position.z);
+            GameObject.transform.position = new Vector3(position.x, position.y, position.z);
         }
 
         public void SetChar()
@@ -41,14 +42,14 @@ namespace GamePlay.TileSystem
             _charText.text = _tileData.character;
         }
         
-        public void AddChildren(List<Tile> tiles)
+        public void AddChildren(List<Tile> allTiles)
         {
-            var childrenIndices = _tileData.children;
-            for (int i = 0; i < tiles.Count; i++)
+            var childrenIndices = new List<int>(_tileData.children);
+            for (int i = 0; i < allTiles.Count; i++)
             {
                 if(childrenIndices.Count == 0) break;
                 
-                var tile = tiles[i];
+                var tile = allTiles[i];
                 if(tile == this)
                     continue;
 
@@ -57,6 +58,16 @@ namespace GamePlay.TileSystem
                     AddChild(tile);
                     childrenIndices.Remove(tile.ID);
                 }
+            }
+        }
+
+        public void RemoveChildren(out List<Tile> childrenToBeRemoved)
+        {
+            childrenToBeRemoved = new List<Tile>(_childrenTiles);
+            while (_childrenTiles.Count > 0)
+            {
+                var tile = _childrenTiles[^1];
+                RemoveChild(tile);
             }
         }
 
@@ -76,7 +87,7 @@ namespace GamePlay.TileSystem
         {
             _parentTiles.Add(tile);
             
-            if(_parentTiles.Count == 1)
+            if(_parentTiles.Count > 0)
                 MakeInteractable(false);
         }
 
@@ -91,17 +102,19 @@ namespace GamePlay.TileSystem
         public void Reset()
         {
             _charText.text = string.Empty;
-            _gameObject.transform.position = Vector3.zero;
+            GameObject.transform.position = Vector3.zero;
             _childrenTiles.Clear();
             _tileData = null;
         }
+
+        public bool IsSame(GameObject gameObject) => gameObject == GameObject;
 
         private void MakeInteractable(bool canInteract)
         {
             var color = canInteract ? Color.white : (Color.gray + Color.white)/2f;
             _spriteRenderer.color = color;
             var layer = canInteract ? LayerMask.NameToLayer("Tile") : LayerMask.NameToLayer("Default");
-            _gameObject.layer = layer;
+            GameObject.layer = layer;
         }
     }
 }

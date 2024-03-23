@@ -975,6 +975,7 @@ GameObject:
   - component: {fileID: 564535276}
   - component: {fileID: 564535275}
   - component: {fileID: 564535274}
+  - component: {fileID: 564535277}
   m_Layer: 5
   m_Name: UndoButton
   m_TagString: Untagged
@@ -1085,6 +1086,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564535272}
   m_CullTransparentMesh: 1
+--- !u!114 &564535277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564535272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa55f0cf4ab17c44b097740918b9f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &581893293
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,7 +1549,7 @@ MonoBehaviour:
   screen: {fileID: 833979727}
   screenGameObject: {fileID: 833979724}
   inGameObject: {fileID: 51234672}
-  undoButton: {fileID: 564535274}
+  undoButton: {fileID: 564535277}
   submitButton: {fileID: 2002105860}
   inGameScore: {fileID: 642404187}
   levelTitleText: {fileID: 1104721050}
@@ -2668,7 +2681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1738453828
 RectTransform:
   m_ObjectHideFlags: 0

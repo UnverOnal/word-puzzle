@@ -12,6 +12,7 @@ namespace GameState
         public GameStatePresenter()
         {
             _gameStateModel = new GameStateModel();
+            UpdateGameState(GameState.Home);
         }
 
         public void UpdateGameState(GameState state)

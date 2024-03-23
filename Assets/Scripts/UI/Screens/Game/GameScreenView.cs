@@ -1,11 +1,15 @@
+using LevelCreation;
+
 namespace UI.Screens.Game
 {
     public class GameScreenView : ScreenView
     {
+        private readonly LevelPresenter _levelPresenter;
         private readonly GameScreenResources _resources;
         
-        public GameScreenView(ScreenResources screenResources) : base(screenResources)
+        public GameScreenView(ScreenResources screenResources, LevelPresenter levelPresenter) : base(screenResources)
         {
+            _levelPresenter = levelPresenter;
             _resources = (GameScreenResources)screenResources;
         }
 
@@ -15,9 +19,10 @@ namespace UI.Screens.Game
             _resources.inGameScore.text = scoreText;
         }
 
-        public void SetLevelTitle(string title)
+        public void SetLevelTitle()
         {
-            _resources.levelTitleText.text = title.ToString();
+            var title = _levelPresenter.CurrentLevelData.title;
+            _resources.levelTitleText.text = title;
         }
     }
 }

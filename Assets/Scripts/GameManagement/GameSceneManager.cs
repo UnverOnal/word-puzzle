@@ -1,5 +1,4 @@
-using GameState;
-using LevelCreation;
+using GamePlay;
 using UI;
 using VContainer;
 using VContainer.Unity;
@@ -9,19 +8,19 @@ namespace GameManagement
     public class GameSceneManager : IInitializable
     {
         private readonly UiManager _uiManager;
-        private readonly GameStatePresenter _statePresenter;
+        private readonly GamePlayPresenter _gamePlayPresenter;
 
         [Inject]
-        public GameSceneManager(UiManager uiManager,GameStatePresenter statePresenter)
+        public GameSceneManager(UiManager uiManager, GamePlayPresenter gamePlayPresenter)
         {
             _uiManager = uiManager;
-            _statePresenter = statePresenter;
+            _gamePlayPresenter = gamePlayPresenter;
         }
 
         public void Initialize()
         {
             _uiManager.Initialize();
-            _statePresenter.UpdateGameState(GameState.GameState.Home);
+            _gamePlayPresenter.Initialize();
         }
     }
 }

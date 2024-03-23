@@ -8,7 +8,7 @@ namespace UI.Screens.Game
     public class GameScreenResources : ScreenResources
     {
         public GameObject inGameObject;
-        public Button undoButton;
+        public HoldableButton undoButton;
         public Button submitButton;
         public TextMeshProUGUI inGameScore;
         public TextMeshProUGUI levelTitleText;

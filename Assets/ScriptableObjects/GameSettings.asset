@@ -16,3 +16,6 @@ MonoBehaviour:
   cameraPositionOffset: {x: 0, y: 15, z: 0}
   formingAreaOffset: {x: 0, y: 35, z: 0}
   formingAreaSize: 7
+  moveData:
+    speed: 150
+    ease: 28

@@ -21,7 +21,7 @@ namespace UI.Screens
 
         protected abstract void OnStateUpdate(GameState.GameState gameState);
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _gameStatePresenter.OnStateUpdate += OnStateUpdate;
         }

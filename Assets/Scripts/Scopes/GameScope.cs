@@ -1,4 +1,5 @@
 using GameManagement;
+using GamePlay;
 using GameState;
 using LevelCreation;
 using UI;
@@ -31,6 +32,7 @@ namespace Scopes
             builder.Register<LevelPresenter>(Lifetime.Singleton);
 
             builder.Register<GameStatePresenter>(Lifetime.Singleton);
+            builder.Register<GamePlayPresenter>(Lifetime.Singleton);
         }
 
         private void RegisterScreens(IContainerBuilder builder)
