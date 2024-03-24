@@ -17,26 +17,29 @@ namespace GamePlay
         private readonly IInputService _inputService;
         private readonly CommandInvoker _commandInvoker;
         private readonly LevelPresenter _levelPresenter;
-        private readonly DictionaryPreprocessor _dictionaryPreprocessor;
+        private readonly WordDictionary _wordDictionary;
         private readonly FormingAreaPresenter _formingAreaPresenter;
 
         private readonly GamePlayModel _gamePlayModel;
+        private readonly PossibleMoveTracker _possibleMoveTracker;
 
         private readonly ObjectPool<MoveCommand> _moveCommandPool;
 
         [Inject]
         public GamePlayPresenter(IInputService inputService, IPoolService poolService, ICommandService commandService,
-            LevelPresenter levelPresenter, GameSettings gameSettings, DictionaryPreprocessor dictionaryPreprocessor, FormingAreaPresenter formingAreaPresenter)
+            LevelPresenter levelPresenter, GameSettings gameSettings, WordDictionary wordDictionary, FormingAreaPresenter formingAreaPresenter)
         {
             _inputService = inputService;
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
-            _dictionaryPreprocessor = dictionaryPreprocessor;
+            _wordDictionary = wordDictionary;
             _formingAreaPresenter = formingAreaPresenter;
 
-            _gamePlayModel = new GamePlayModel();
+            _gamePlayModel = new GamePlayModel(_levelPresenter);
 
             _moveCommandPool = poolService.GetPoolFactory().CreatePool(() => new MoveCommand(gameSettings.moveData));
+
+            _possibleMoveTracker = new PossibleMoveTracker(wordDictionary);
         }
 
         public void Initialize()
@@ -50,30 +53,38 @@ namespace GamePlay
                 return;
 
             var tile = GetSelectedTile(selectedObject);
+            MoveLetter(tile);
+        }
+
+        private void MoveLetter(LetterTile tile)
+        {
             var moveCommand = _moveCommandPool.Get();
 
             var targetPosition = _formingAreaPresenter.GetNextFreePosition();
-            _formingAreaPresenter.AddLetter(tile);
             moveCommand.SetMoveData(tile, targetPosition);
-
             _commandInvoker.ExecuteCommand(moveCommand);
+            
+            _formingAreaPresenter.AddLetter(tile);
+            _gamePlayModel.RemoveTile(tile);
         }
 
         public void Undo()
         {
             _commandInvoker.UndoCommand();
-            _formingAreaPresenter.RemoveLetter();
+            var letter = _formingAreaPresenter.TakeLetter();
+            _gamePlayModel.AddTile(letter);
         }
 
         public void UndoAll()
         {
             _commandInvoker.UndoCommandAll();
-            _formingAreaPresenter.Reset();
+            var letters = _formingAreaPresenter.TakeLetterAll();
+            _gamePlayModel.AddTiles(letters);
         }
 
         public void Submit()
         {
-            var isWordCorrect = _dictionaryPreprocessor.ContainsWord(_formingAreaPresenter.Word);
+            var isWordCorrect = _wordDictionary.ContainsWord(_formingAreaPresenter.Word);
             
             if(!isWordCorrect)
                 _commandInvoker.UndoCommandAll();
@@ -87,7 +98,14 @@ namespace GamePlay
             while (_commandInvoker.Commands.Count > 0)
                 _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
                 
-            _formingAreaPresenter.Reset();
+            _formingAreaPresenter.TakeLetterAll();
+
+            var isLevelEnd =
+                (_gamePlayModel.Tiles.Count < 5 && !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles)) ||
+                _gamePlayModel.Tiles.Count < 1;
+            
+            if(isLevelEnd)
+                Debug.Log("Level End");
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)

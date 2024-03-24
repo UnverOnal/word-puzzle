@@ -9,13 +9,13 @@ namespace GameManagement
     public class GameManager : IInitializable
     {
         private readonly ISceneService _sceneService;
-        private readonly DictionaryPreprocessor _dictionaryPreprocessor;
+        private readonly WordDictionary _wordDictionary;
 
         [Inject]
-        public GameManager(ISceneService sceneService, DictionaryPreprocessor dictionaryPreprocessor)
+        public GameManager(ISceneService sceneService, WordDictionary wordDictionary)
         {
             _sceneService = sceneService;
-            _dictionaryPreprocessor = dictionaryPreprocessor;
+            _wordDictionary = wordDictionary;
         }
 
         public void Initialize()
@@ -23,7 +23,7 @@ namespace GameManagement
             Application.targetFrameRate = 60;
         
             _sceneService.LoadScene(SceneType.GameScene);
-            _dictionaryPreprocessor.Initialize();
+            _wordDictionary.Initialize();
         }
     }
 }

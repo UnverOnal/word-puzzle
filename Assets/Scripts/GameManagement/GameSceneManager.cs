@@ -10,14 +10,14 @@ namespace GameManagement
     {
         private readonly UiManager _uiManager;
         private readonly GamePlayPresenter _gamePlayPresenter;
-        private readonly DictionaryPreprocessor _dictionaryPreprocessor;
+        private readonly WordDictionary _wordDictionary;
 
         [Inject]
-        public GameSceneManager(UiManager uiManager, GamePlayPresenter gamePlayPresenter, DictionaryPreprocessor dictionaryPreprocessor)
+        public GameSceneManager(UiManager uiManager, GamePlayPresenter gamePlayPresenter, WordDictionary wordDictionary)
         {
             _uiManager = uiManager;
             _gamePlayPresenter = gamePlayPresenter;
-            _dictionaryPreprocessor = dictionaryPreprocessor;
+            _wordDictionary = wordDictionary;
         }
 
         public void Initialize()

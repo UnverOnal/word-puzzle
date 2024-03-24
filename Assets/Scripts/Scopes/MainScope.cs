@@ -21,7 +21,7 @@ namespace Scopes
         {
             builder.RegisterEntryPoint<GameManager>();
 
-            builder.Register<DictionaryPreprocessor>(Lifetime.Singleton);
+            builder.Register<WordDictionary>(Lifetime.Singleton);
 
             builder.RegisterInstance(dictionaryData);
             builder.RegisterInstance(sceneDataContainer);

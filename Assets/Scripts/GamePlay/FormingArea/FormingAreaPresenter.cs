@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Dictionary;
 using GamePlay.TileSystem;
 using LevelCreation;
@@ -10,15 +11,15 @@ namespace GamePlay.FormingArea
     {
         public string Word => _formingAreaModel.Word;
         
-        private readonly DictionaryPreprocessor _dictionaryPreprocessor;
+        private readonly WordDictionary _wordDictionary;
 
         private readonly FormingAreaModel _formingAreaModel;
         private readonly FormingAreaView _formingAreaView;
 
         [Inject]
-        public FormingAreaPresenter(LevelPresenter levelPresenter, DictionaryPreprocessor dictionaryPreprocessor)
+        public FormingAreaPresenter(LevelPresenter levelPresenter, WordDictionary wordDictionary)
         {
-            _dictionaryPreprocessor = dictionaryPreprocessor;
+            _wordDictionary = wordDictionary;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
             _formingAreaView = new FormingAreaView();
@@ -29,14 +30,18 @@ namespace GamePlay.FormingArea
             _formingAreaModel.AddCharacter(letterTile);
         }
 
-        public void RemoveLetter()
+        public LetterTile TakeLetter()
         {
+            var letter = _formingAreaModel.LetterTiles[^1];
             _formingAreaModel.RemoveCharacter();
+            return letter;
         }
 
-        public void Reset()
+        public List<LetterTile> TakeLetterAll()
         {
+            var letters = new List<LetterTile>(_formingAreaModel.LetterTiles);
             _formingAreaModel.ResetWord();
+            return letters;
         }
 
         public Vector3 GetNextFreePosition()

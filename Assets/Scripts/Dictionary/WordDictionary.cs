@@ -4,13 +4,13 @@ using VContainer;
 
 namespace Dictionary
 {
-    public class DictionaryPreprocessor
+    public class WordDictionary
     {
         private readonly DictionaryData _data;
         private HashSet<string> _wordHashSet;
 
         [Inject]
-        public DictionaryPreprocessor(DictionaryData data)
+        public WordDictionary(DictionaryData data)
         {
             _data = data;
         }
