@@ -21,7 +21,7 @@ namespace UI.Screens.Game
 
         public void SetLevelTitle()
         {
-            var title = _levelPresenter.CurrentLevelData.title;
+            var title = _levelPresenter.LevelData?.title;
             _resources.levelTitleText.text = title;
         }
     }

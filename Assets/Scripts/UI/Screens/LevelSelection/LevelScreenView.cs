@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using GameState;
-using Services.PoolingService;
+using LevelCreation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.Screens.LevelSelection
 {
@@ -9,19 +10,20 @@ namespace UI.Screens.LevelSelection
     {
         private readonly GameObject _levelUiPrefab;
         private readonly GameStatePresenter _statePresenter;
+        private readonly LevelPresenter _levelPresenter;
         private readonly LevelScreenResources _resources;
+        
+        private readonly Dictionary<GameObject, int> _playButtons;
 
-        private readonly ObjectPool<GameObject> _levelUiPool;
-
-        public LevelScreenView(ScreenResources screenResources, GameObject levelUiPrefab, IPoolService poolService,
-            GameStatePresenter statePresenter) : base(screenResources)
+        public LevelScreenView(ScreenResources screenResources, GameObject levelUiPrefab,
+            GameStatePresenter statePresenter, LevelPresenter levelPresenter) : base(screenResources)
         {
             _levelUiPrefab = levelUiPrefab;
             _statePresenter = statePresenter;
+            _levelPresenter = levelPresenter;
             _resources = (LevelScreenResources)screenResources;
-
-            var poolFactory = poolService.GetPoolFactory();
-            _levelUiPool = poolFactory.CreatePool(LevelUiCreator);
+            
+            _playButtons = new Dictionary<GameObject, int>();
         }
 
         public void DisplayLevels(List<LevelDisplayData> levelDisplayDatas)
@@ -30,10 +32,12 @@ namespace UI.Screens.LevelSelection
             {
                 var levelData = levelDisplayDatas[i];
 
-                var levelUiGameObject = _levelUiPool.Get();
+                var levelUiGameObject = LevelUiCreator();
                 var levelUiResources = levelUiGameObject.GetComponent<LevelUiResources>();
 
                 SetLevelUiData(levelUiResources, levelData);
+                
+                _playButtons.Add(levelUiResources.playButton.gameObject, i);
             }
         }
 
@@ -54,6 +58,9 @@ namespace UI.Screens.LevelSelection
 
         private void OnPlayButtonClicked()
         {
+            var clickedObject = EventSystem.current.currentSelectedGameObject;
+            _playButtons.TryGetValue(clickedObject, out var levelIndex);
+            _levelPresenter.CreateLevel(levelIndex);
             _statePresenter.UpdateGameState(GameState.GameState.Game);
             Disable();
         }

@@ -1,6 +1,7 @@
 using GameManagement;
 using GamePlay;
 using GamePlay.FormingArea;
+using GamePlay.Score;
 using GameState;
 using LevelCreation;
 using UI;
@@ -19,8 +20,10 @@ namespace Scopes
         [SerializeField] private HomeScreenResources homeScreenResources;
         [SerializeField] private LevelScreenResources levelScreenResources;
         [SerializeField] private GameScreenResources gameScreenResources;
+        
         [SerializeField] private LevelScreenAssets levelScreenAssets;
         [SerializeField] private LevelAssets levelAssets;
+        [SerializeField] private ScoreData scoreData;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -35,6 +38,9 @@ namespace Scopes
             builder.Register<GameStatePresenter>(Lifetime.Singleton);
             builder.Register<GamePlayPresenter>(Lifetime.Singleton);
             builder.Register<FormingAreaPresenter>(Lifetime.Singleton);
+
+            builder.RegisterInstance(scoreData);
+            builder.Register<ScorePresenter>(Lifetime.Singleton);
         }
 
         private void RegisterScreens(IContainerBuilder builder)

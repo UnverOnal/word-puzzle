@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Dictionary
     {
         [SerializeField] private TextAsset dictionaryTextFile; 
         [HideInInspector]public bool dictionaryConverted;
+        [HideInInspector] public int minimumWordSize = int.MaxValue;
 
         public List<string> DictionaryWords { get; private set; }
 
@@ -27,10 +29,18 @@ namespace Dictionary
             {
                 var word = words[i];
                 DictionaryWords.Add(word.Trim());
+                CalculateMinimumWordSize(word);
             }
 
             dictionaryConverted = true;
             Debug.Log("Dictionary converted to list. Word count: " + DictionaryWords.Count);
+            Debug.Log("Minimum Word Size : " + minimumWordSize);
+        }
+
+        private void CalculateMinimumWordSize(string word)
+        {
+            if (minimumWordSize > word.Length)
+                minimumWordSize = word.Length;
         }
     }
 }

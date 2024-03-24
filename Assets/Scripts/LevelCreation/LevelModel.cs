@@ -7,7 +7,6 @@ namespace LevelCreation
     public class LevelModel
     {
         public List<LevelData> LevelDatas { get; private set; }
-        public LevelData CurrentLevel => LevelDatas[_levelCount];
         
         public List<LetterTile> Tiles { get; }
         public List<BlankTile> FormingTiles { get; set; }
@@ -15,9 +14,6 @@ namespace LevelCreation
         private readonly IConverter _jsonConverter;
         private readonly LevelAssets _levelAssets;
         
-
-        private int _levelCount;
-
         public LevelModel(IFileConversionService fileConversionService, LevelAssets levelAssets)
         {
             _jsonConverter = fileConversionService.GetConverter(ConverterType.JsonConverter);
@@ -38,9 +34,9 @@ namespace LevelCreation
             }
         }
 
-        public void UpdateLevelCount()
+        public LevelData GetLevel(int index)
         {
-            _levelCount++;
+            return LevelDatas[index];
         }
     }
 }

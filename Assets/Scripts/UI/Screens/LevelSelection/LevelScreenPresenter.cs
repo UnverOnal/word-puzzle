@@ -1,6 +1,5 @@
 using GameState;
 using LevelCreation;
-using Services.PoolingService;
 using VContainer;
 
 namespace UI.Screens.LevelSelection
@@ -11,12 +10,12 @@ namespace UI.Screens.LevelSelection
         private readonly LevelScreenView _screenView;
 
         [Inject]
-        public LevelScreenPresenter(IPoolService poolService, LevelScreenResources resources,
+        public LevelScreenPresenter(LevelScreenResources resources,
             LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter) : base(statePresenter)
         {
             _levelScreenModel = new LevelScreenModel(levelPresenter.LevelDatas);
             _screenView =
-                new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, poolService, statePresenter);
+                new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, statePresenter, levelPresenter);
         }
 
         public void Initialize()

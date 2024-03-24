@@ -1,6 +1,7 @@
 using Dictionary;
 using GameManagement;
 using Services.CommandService;
+using Services.DataStorageService;
 using Services.FileConversionService;
 using Services.InputService;
 using Services.PoolingService;
@@ -41,6 +42,8 @@ namespace Scopes
             builder.Register<IFileConversionService, FileConversionService>(Lifetime.Singleton);
 
             builder.Register<ICommandService, CommandService>(Lifetime.Singleton);
+
+            builder.Register<IDataStorageService, DataStorageService>(Lifetime.Singleton);
         }
     }
 }

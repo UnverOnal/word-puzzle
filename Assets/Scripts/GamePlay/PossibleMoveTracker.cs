@@ -15,6 +15,10 @@ namespace GamePlay
 
         public bool IsPossible(List<LetterTile> tiles)
         {
+            var canCalculate = tiles.Count <= _wordDictionary.MinimumWordSize + 1;
+            if (!canCalculate)
+                return true;
+            
             var letters = GetChars(tiles);
             var combinations = GenerateCombinations(letters);
             

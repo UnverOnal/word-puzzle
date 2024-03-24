@@ -26,7 +26,6 @@ namespace UI.Screens.Game
         public void Initialize()
         {
             SetStateAction();
-            _screenView.SetLevelTitle();
             SubscribeButtons();
         }
 
@@ -43,7 +42,10 @@ namespace UI.Screens.Game
         protected override void OnStateUpdate(GameState.GameState gameState)
         {
             if (gameState == GameState.GameState.Game)
+            {
+                _screenView.SetLevelTitle();
                 _screenView.Enable();
+            }
             else if (_screenView.IsActive)
                 _screenView.Disable();
         }

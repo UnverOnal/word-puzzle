@@ -2,6 +2,7 @@ using System;
 using Dictionary;
 using GameManagement;
 using GamePlay.FormingArea;
+using GamePlay.Score;
 using GamePlay.TileSystem;
 using LevelCreation;
 using Services.CommandService;
@@ -19,6 +20,7 @@ namespace GamePlay
         private readonly LevelPresenter _levelPresenter;
         private readonly WordDictionary _wordDictionary;
         private readonly FormingAreaPresenter _formingAreaPresenter;
+        private readonly ScorePresenter _scorePresenter;
 
         private readonly GamePlayModel _gamePlayModel;
         private readonly PossibleMoveTracker _possibleMoveTracker;
@@ -27,13 +29,15 @@ namespace GamePlay
 
         [Inject]
         public GamePlayPresenter(IInputService inputService, IPoolService poolService, ICommandService commandService,
-            LevelPresenter levelPresenter, GameSettings gameSettings, WordDictionary wordDictionary, FormingAreaPresenter formingAreaPresenter)
+            LevelPresenter levelPresenter, GameSettings gameSettings, WordDictionary wordDictionary,
+            FormingAreaPresenter formingAreaPresenter, ScorePresenter scorePresenter)
         {
             _inputService = inputService;
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
             _wordDictionary = wordDictionary;
             _formingAreaPresenter = formingAreaPresenter;
+            _scorePresenter = scorePresenter;
 
             _gamePlayModel = new GamePlayModel(_levelPresenter);
 
@@ -63,7 +67,7 @@ namespace GamePlay
             var targetPosition = _formingAreaPresenter.GetNextFreePosition();
             moveCommand.SetMoveData(tile, targetPosition);
             _commandInvoker.ExecuteCommand(moveCommand);
-            
+
             _formingAreaPresenter.AddLetter(tile);
             _gamePlayModel.RemoveTile(tile);
         }
@@ -85,33 +89,35 @@ namespace GamePlay
         public void Submit()
         {
             var isWordCorrect = _wordDictionary.ContainsWord(_formingAreaPresenter.Word);
-            
-            if(!isWordCorrect)
-                _commandInvoker.UndoCommandAll();
+
+            if (!isWordCorrect)
+                UndoAll();
             else
             {
                 _commandInvoker.Reset();
-                _formingAreaPresenter.DestroyTiles();
+                _formingAreaPresenter.SubmitWord();
             }
-            
-            //Returns commands to the pool
-            while (_commandInvoker.Commands.Count > 0)
-                _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
-                
-            _formingAreaPresenter.TakeLetterAll();
 
-            var isLevelEnd =
-                (_gamePlayModel.Tiles.Count < 5 && !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles)) ||
-                _gamePlayModel.Tiles.Count < 1;
-            
-            if(isLevelEnd)
+            // Returns commands to the pool
+             while (_commandInvoker.Commands.Count > 0)
+                 _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
+
+            _formingAreaPresenter.Reset();
+
+            var isLevelEnd = !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles) || _gamePlayModel.Tiles.Count < 1;
+            if (isLevelEnd)
+            {
+                var remainingLetterCount = _gamePlayModel.Tiles.Count;
+                _scorePresenter.CalculateScores(_formingAreaPresenter.CorrectWords, remainingLetterCount);
+                Debug.Log("Score : " + _scorePresenter.Score);
                 Debug.Log("Level End");
+            }
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)
         {
             var tiles = _levelPresenter.Tiles;
-            for (int i = 0; i < tiles.Count; i++)
+            for (var i = 0; i < tiles.Count; i++)
             {
                 var tile = tiles[i];
                 if (tile.IsSame(gameObject))

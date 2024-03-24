@@ -8,7 +8,8 @@ namespace GamePlay.FormingArea
     {
         public List<BlankTile> FormingTiles => _levelPresenter.FormingTiles;
         public List<LetterTile> LetterTiles { get; private set; }
-        public string Word { get; private set; }
+        public List<string> CorrectWords { get; private set; }
+        public string CurrentWord { get; private set; }
         public int OccupiedIndex { get; private set; }
 
         private readonly LevelPresenter _levelPresenter;
@@ -18,30 +19,41 @@ namespace GamePlay.FormingArea
             _levelPresenter = levelPresenter;
 
             LetterTiles = new List<LetterTile>();
+            CorrectWords = new List<string>();
         }
 
         public void AddCharacter(LetterTile letterTile)
         {
             LetterTiles.Add(letterTile);
-            Word += char.Parse(letterTile.Character);
+            CurrentWord += char.Parse(letterTile.Character);
             OccupiedIndex++;
         }
 
         public void RemoveCharacter()
         {
-            if (string.IsNullOrEmpty(Word))
+            if (string.IsNullOrEmpty(CurrentWord))
                 return;
 
             LetterTiles.Remove(LetterTiles[^1]);
-            Word = Word[..^1];
+            CurrentWord = CurrentWord[..^1];
             OccupiedIndex--;
         }
 
         public void ResetWord()
         {
             LetterTiles.Clear();
-            Word = string.Empty;
+            CurrentWord = string.Empty;
             OccupiedIndex = 0;
+        }
+
+        public void AddCurrentWord()
+        {
+            CorrectWords.Add(CurrentWord);
+        }
+
+        public void ResetWordsAll()
+        {
+            CorrectWords.Clear();
         }
     }
 }

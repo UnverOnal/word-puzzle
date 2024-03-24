@@ -9,8 +9,9 @@ namespace GamePlay.FormingArea
 {
     public class FormingAreaPresenter
     {
-        public string Word => _formingAreaModel.Word;
-        
+        public List<string> CorrectWords => _formingAreaModel.CorrectWords;
+        public string Word => _formingAreaModel.CurrentWord;
+
         private readonly WordDictionary _wordDictionary;
 
         private readonly FormingAreaModel _formingAreaModel;
@@ -40,8 +41,13 @@ namespace GamePlay.FormingArea
         public List<LetterTile> TakeLetterAll()
         {
             var letters = new List<LetterTile>(_formingAreaModel.LetterTiles);
-            _formingAreaModel.ResetWord();
+            Reset();
             return letters;
+        }
+
+        public void Reset()
+        {
+            _formingAreaModel.ResetWord();
         }
 
         public Vector3 GetNextFreePosition()
@@ -51,10 +57,16 @@ namespace GamePlay.FormingArea
             return position;
         }
 
-        public void DestroyTiles()
+        public void SubmitWord()
+        {
+            DestroyWord();
+            _formingAreaModel.AddCurrentWord();
+        }
+
+        private void DestroyWord()
         {
             var letters = _formingAreaModel.LetterTiles;
-            for (int i = 0; i < letters.Count; i++)
+            for (var i = 0; i < letters.Count; i++)
             {
                 var letterTile = letters[i];
                 letterTile.GameObject.SetActive(false);

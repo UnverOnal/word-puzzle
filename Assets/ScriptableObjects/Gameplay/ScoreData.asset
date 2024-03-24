@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289ab7f7c92ddd7499528f334def3b7c, type: 3}
+  m_Name: ScoreData
+  m_EditorClassIdentifier: 
+  fixedFactor: 10
+  letterDatas:
+  - point: 1
+    letter: 101
+  - point: 1
+    letter: 97
+  - point: 1
+    letter: 111
+  - point: 1
+    letter: 110
+  - point: 1
+    letter: 114
+  - point: 1
+    letter: 116
+  - point: 1
+    letter: 108
+  - point: 1
+    letter: 115
+  - point: 1
+    letter: 117
+  - point: 1
+    letter: 105
+  - point: 2
+    letter: 100
+  - point: 2
+    letter: 103
+  - point: 3
+    letter: 98
+  - point: 3
+    letter: 99
+  - point: 3
+    letter: 109
+  - point: 3
+    letter: 112
+  - point: 4
+    letter: 102
+  - point: 4
+    letter: 104
+  - point: 4
+    letter: 118
+  - point: 4
+    letter: 119
+  - point: 4
+    letter: 121
+  - point: 5
+    letter: 107
+  - point: 8
+    letter: 106
+  - point: 8
+    letter: 120
+  - point: 10
+    letter: 113
+  - point: 10
+    letter: 122

@@ -6,6 +6,8 @@ namespace Dictionary
 {
     public class WordDictionary
     {
+        public int MinimumWordSize => _data.minimumWordSize;
+        
         private readonly DictionaryData _data;
         private HashSet<string> _wordHashSet;
 
