@@ -21,27 +21,21 @@ namespace LevelCreation
 
         public void SetTile(LetterTile letterTile)
         {
-            letterTile.SetPosition();
-            letterTile.SetChar();
+            letterTile.Initialize();
         }
 
-        public List<BlankTile> SetFormingArea(Vector3 initialPosition)
+        public void SetFormingArea(Vector3 initialPosition, List<BlankTile> blankTiles)
         {
-            var formingArea = new List<BlankTile>();
-
             float? nextTileDistance = null;
             for (var i = 0; i < _gameSettings.formingAreaSize; i++)
             {
-                var emptyTile = new BlankTile(_levelAssets.emptyTilePrefab, _emptyTileParent.transform);
-                nextTileDistance ??= CalculateFormingTileDistance(emptyTile);
+                var blankTile = blankTiles[i];
+                nextTileDistance ??= CalculateFormingTileDistance(blankTile);
 
                 var position = CalculateFormingTilePosition(i, initialPosition, nextTileDistance.Value);
-                emptyTile.SetPosition(position);
-
-                formingArea.Add(emptyTile);
+                blankTile.Initialize();
+                blankTile.SetPosition(position);
             }
-
-            return formingArea;
         }
 
         private Vector3 CalculateFormingTilePosition(int index, Vector3 initialPosition, float distance)

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using LevelCreation;
 using Services.DataStorageService;
+using UnityEngine;
 
 namespace UI.Screens.LevelSelection
 {
@@ -17,6 +18,8 @@ namespace UI.Screens.LevelSelection
         {
             _levelCreationDatas = levelCreationDatas;
             _dataStorageService = dataStorageService;
+
+            LevelDisplayDatas = new List<LevelDisplayData>();
         }
 
         private async Task<Dictionary<int, LevelStatus>> SetLevelStatusData()
@@ -30,7 +33,7 @@ namespace UI.Screens.LevelSelection
         {
             var levelStatusMap = await SetLevelStatusData();
 
-            var datas = new List<LevelDisplayData>();
+            LevelDisplayDatas.Clear();
             for (var i = 0; i < _levelCreationDatas.Count; i++)
             {
                 levelStatusMap.TryGetValue(i, out var levelStatus);
@@ -43,10 +46,8 @@ namespace UI.Screens.LevelSelection
                     title = _levelCreationDatas[i].title,
                     playStatus = levelStatus.playStatus
                 };
-                datas.Add(data);
+                LevelDisplayDatas.Add(data);
             }
-
-            LevelDisplayDatas = datas;
         }
     }
 }

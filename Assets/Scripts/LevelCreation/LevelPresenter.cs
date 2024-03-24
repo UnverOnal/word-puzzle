@@ -10,6 +10,7 @@ namespace LevelCreation
 {
     public class LevelPresenter
     {
+        private readonly GameSettings _gameSettings;
         public int CurrentLevelIndex { get; private set; }
         public List<LevelCreationData> LevelDatas => _levelModel.LevelDatas;
         public LevelCreationData LevelCreationData { get; private set; }
@@ -17,7 +18,8 @@ namespace LevelCreation
         public List<LetterTile> Tiles => _levelModel.Tiles;
         public List<BlankTile> FormingTiles => _levelModel.FormingTiles;
 
-        private readonly ObjectPool<LetterTile> _tilePool;
+        private readonly ObjectPool<LetterTile> _letterTilePool;
+        private readonly ObjectPool<BlankTile> _blankTilePool;
 
         private readonly LevelModel _levelModel;
         private readonly LevelView _levelView;
@@ -28,15 +30,18 @@ namespace LevelCreation
             IFileConversionService fileConversionService,
             IPoolService poolService)
         {
+            _gameSettings = gameSettings;
             _levelModel = new LevelModel(fileConversionService, levelAssets);
             _levelView = new LevelView(gameSettings, levelAssets);
             _levelFitter = new LevelFitter(gameSettings);
 
             _levelModel.CreateLevelData();
 
-            var tileParent = new GameObject("TileParent");
-            _tilePool = poolService.GetPoolFactory()
-                .CreatePool(() => new LetterTile(levelAssets.tilePrefab, tileParent.transform));
+            _letterTilePool = poolService.GetPoolFactory()
+                .CreatePool(() => new LetterTile(levelAssets.tilePrefab, new GameObject("TileParent").transform));
+            _blankTilePool = poolService.GetPoolFactory()
+                .CreatePool(() => new BlankTile(levelAssets.emptyTilePrefab, new GameObject("FormingArea").transform),
+                    false, gameSettings.formingAreaSize);
         }
 
         public void CreateLevel(int levelIndex)
@@ -49,20 +54,44 @@ namespace LevelCreation
             {
                 var tileData = LevelCreationData.tiles[i];
 
-                var tile = _tilePool.Get();
+                var tile = _letterTilePool.Get();
                 tile.SetTileData(tileData);
-                _levelModel.Tiles.Add(tile);
-
                 _levelView.SetTile(tile);
+                
+                _levelModel.Tiles.Add(tile);
             }
 
             SetChildrenTiles();
             CreateFormingArea();
         }
 
+        public void ReturnTile(Tile tile)
+        {
+            tile.Reset();
+
+            var tileType = tile.GetType();
+            if(tileType == typeof(LetterTile))
+                _letterTilePool.Return((LetterTile)tile);
+            else
+                _blankTilePool.Return((BlankTile)tile);
+        }
+        
+        public void ReturnTile(IEnumerable<Tile> tiles)
+        {
+            foreach (var tile in tiles)
+                ReturnTile(tile);
+        }
+
         private void CreateFormingArea()
         {
-            var formingTiles = _levelView.SetFormingArea(_levelFitter.BoundsCenter);
+            var formingTiles = new List<BlankTile>();
+            for (int i = 0; i < _gameSettings.formingAreaSize; i++)
+            {
+                var blankTile = _blankTilePool.Get();
+                blankTile.Initialize();
+                formingTiles.Add(blankTile);
+            }
+            _levelView.SetFormingArea(_levelFitter.BoundsCenter, formingTiles);
             _levelModel.FormingTiles = formingTiles;
         }
 

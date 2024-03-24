@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Screens.Game.LevelEnd
 {
@@ -8,5 +9,6 @@ namespace UI.Screens.Game.LevelEnd
         public GameObject levelEndGameObject;
         public TextMeshProUGUI highScore;
         public TextMeshProUGUI congratsText;
+        public Button tapToContinueButton;
     }
 }

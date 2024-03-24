@@ -7,8 +7,8 @@ namespace GamePlay.FormingArea
     public class FormingAreaModel
     {
         public List<BlankTile> FormingTiles => _levelPresenter.FormingTiles;
-        public List<LetterTile> LetterTiles { get; private set; }
-        public List<string> CorrectWords { get; private set; }
+        public List<LetterTile> LetterTiles { get; }
+        public List<string> CorrectWords { get; }
         public string CurrentWord { get; private set; }
         public int OccupiedIndex { get; private set; }
 

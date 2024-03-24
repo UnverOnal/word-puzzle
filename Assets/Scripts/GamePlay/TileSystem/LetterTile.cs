@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LevelCreation;
+using Services.DataStorageService;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace GamePlay.TileSystem
     public class LetterTile : Tile
     {
         public override int ID => _tileData.id;
+
         public string Character { get; private set; }
         
         private readonly List<LetterTile> _childrenTiles = new();
@@ -29,19 +31,23 @@ namespace GamePlay.TileSystem
         {
             _tileData = tileData;
         }
-
-        public void SetPosition()
+        
+        public override void Initialize()
         {
-            var position = _tileData.position;
-            GameObject.transform.position = new Vector3(position.x, position.y, position.z);
-        }
-
-        public void SetChar()
-        {
-            Character = _tileData.character;
-            _charText.text = _tileData.character;
+            GameObject.SetActive(true);
+            SetPosition();
+            SetChar();
         }
         
+        public override void Reset()
+        {
+            _charText.text = string.Empty;
+            GameObject.transform.position = Vector3.zero;
+            GameObject.SetActive(false);
+            _childrenTiles.Clear();
+            _tileData = null;
+        }
+
         public void AddChildren(List<LetterTile> allTiles)
         {
             var childrenIndices = new List<int>(_tileData.children);
@@ -99,15 +105,19 @@ namespace GamePlay.TileSystem
                 MakeInteractable(true);
         }
 
-        public void Reset()
+        public bool IsSame(GameObject gameObject) => gameObject == GameObject;
+        
+        private void SetPosition()
         {
-            _charText.text = string.Empty;
-            GameObject.transform.position = Vector3.zero;
-            _childrenTiles.Clear();
-            _tileData = null;
+            var position = _tileData.position;
+            GameObject.transform.position = new Vector3(position.x, position.y, position.z);
         }
 
-        public bool IsSame(GameObject gameObject) => gameObject == GameObject;
+        private void SetChar()
+        {
+            Character = _tileData.character;
+            _charText.text = _tileData.character;
+        }
 
         private void MakeInteractable(bool canInteract)
         {

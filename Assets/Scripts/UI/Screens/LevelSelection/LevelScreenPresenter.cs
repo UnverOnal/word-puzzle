@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using GameState;
 using LevelCreation;
 using Services.DataStorageService;
+using UnityEngine;
 using VContainer;
 
 namespace UI.Screens.LevelSelection
@@ -19,19 +21,26 @@ namespace UI.Screens.LevelSelection
                 new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, statePresenter, levelPresenter);
         }
 
-        public async void Initialize()
+        public void Initialize()
         {
             SetStateAction();
-            await _levelScreenModel.SetLevelData();
-            _screenView.DisplayLevels(_levelScreenModel.LevelDisplayDatas);
         }
 
-        protected override void OnStateUpdate(GameState.GameState gameState)
+        protected override async void OnStateUpdate(GameState.GameState gameState)
         {
-            if(gameState == GameState.GameState.LevelSelection)
+            if (gameState == GameState.GameState.LevelSelection)
+            {
+                await SetLevelUis();
                 _screenView.Enable();
+            }
             else if(_screenView.IsActive)
                 _screenView.Disable();
+        }
+
+        private async UniTask SetLevelUis()
+        {
+            await _levelScreenModel.SetLevelData();
+            _screenView.DisplayLevels(_levelScreenModel.LevelDisplayDatas);
         }
     }
 }

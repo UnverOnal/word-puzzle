@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Dictionary;
 using GamePlay.Score;
 using GamePlay.TileSystem;
@@ -82,16 +83,10 @@ namespace GamePlay.FormingArea
             Debug.Log("Score : " + _scorePresenter.Score);
             Debug.Log("Level End");
 
-            var data = await _dataStorageService.GetFileContentAsync<GameData>();
-            data.levelStatusMap.TryGetValue(_levelPresenter.CurrentLevelIndex, out var levelStatus);
-            levelStatus.highScore = levelStatus.highScore < _scorePresenter.Score
-                ? _scorePresenter.Score
-                : levelStatus.highScore;
-            levelStatus.playStatus = PlayStatus.Played;
-            data.levelStatusMap.Add(_levelPresenter.CurrentLevelIndex, levelStatus);
-            _dataStorageService.SetFileContent(data);
-
+            await UpdateLevelStatusData();
             _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);
+            _levelPresenter.ReturnTile(_formingAreaModel.FormingTiles);
+            _formingAreaModel.ResetWordsAll();
         }
 
         private void DestroyWord()
@@ -101,7 +96,26 @@ namespace GamePlay.FormingArea
             {
                 var letterTile = letters[i];
                 letterTile.GameObject.SetActive(false);
+                _levelPresenter.ReturnTile(letterTile);
             }
+        }
+
+        private async UniTask UpdateLevelStatusData()
+        {
+            var data = await _dataStorageService.GetFileContentAsync<GameData>();
+            var isExist = data.levelStatusMap.TryGetValue(_levelPresenter.CurrentLevelIndex, out var levelStatus);
+            
+            levelStatus.highScore = levelStatus.highScore < _scorePresenter.Score
+                ? _scorePresenter.Score
+                : levelStatus.highScore;
+            levelStatus.playStatus = PlayStatus.Played;
+
+            if (!isExist)
+                data.levelStatusMap.Add(_levelPresenter.CurrentLevelIndex, levelStatus);
+            else
+                data.levelStatusMap[_levelPresenter.CurrentLevelIndex] = levelStatus;
+            
+            _dataStorageService.SetFileContent(data);
         }
     }
 }

@@ -103,7 +103,10 @@ namespace GamePlay
 
             var isLevelEnd = !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles) || _gamePlayModel.Tiles.Count < 1;
             if (isLevelEnd)
+            {
                 _formingAreaPresenter.OnLevelEnd(_gamePlayModel.Tiles.Count);
+                _levelPresenter.ReturnTile(_gamePlayModel.Tiles);
+            }
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)

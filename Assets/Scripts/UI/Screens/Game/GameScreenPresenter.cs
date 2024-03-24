@@ -21,7 +21,7 @@ namespace UI.Screens.Game
             _resources = resources;
             _gamePlayPresenter = gamePlayPresenter;
             _screenView = new GameScreenView(resources, levelPresenter);
-            _levelEndPresenter = new LevelEndPresenter(resources.levelEndResources);
+            _levelEndPresenter = new LevelEndPresenter(resources.levelEndResources, statePresenter);
         }
 
         public void Initialize()
