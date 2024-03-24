@@ -348,9 +348,7 @@ MonoBehaviour:
   parentReference:
     TypeName: 
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 0}
-  - {fileID: 963194225}
+  autoInjectGameObjects: []
   sceneDataContainer: {fileID: 11400000, guid: e635e82706db8724ba285f6d07e3f22f, type: 2}
   gameSettings: {fileID: 11400000, guid: e53c25816364dd54f84b4830320e7767, type: 2}
   dictionaryData: {fileID: 11400000, guid: 22409dda958f84e4e99c5b2a7ea52cd1, type: 2}

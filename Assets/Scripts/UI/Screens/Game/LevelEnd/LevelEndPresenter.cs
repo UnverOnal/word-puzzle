@@ -1,3 +1,4 @@
+
 namespace UI.Screens.Game.LevelEnd
 {
     public class LevelEndPresenter
@@ -17,6 +18,11 @@ namespace UI.Screens.Game.LevelEnd
         {
             _resources.levelEndGameObject.SetActive(true);
             _levelEndView.SetHighScore(_levelEndModel.highScore);
+        }
+
+        public void Close()
+        {
+            _resources.levelEndGameObject.SetActive(false);
         }
     }
 }

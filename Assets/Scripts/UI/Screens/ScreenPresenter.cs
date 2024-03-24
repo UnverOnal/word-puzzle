@@ -1,6 +1,5 @@
 using System;
 using GameState;
-using VContainer;
 
 namespace UI.Screens
 {
@@ -8,7 +7,6 @@ namespace UI.Screens
     {
         private readonly GameStatePresenter _gameStatePresenter;
 
-        [Inject]
         protected ScreenPresenter(GameStatePresenter gameStatePresenter)
         {
             _gameStatePresenter = gameStatePresenter;

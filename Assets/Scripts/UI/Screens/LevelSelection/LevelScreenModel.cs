@@ -1,37 +1,52 @@
 using System.Collections.Generic;
-using System.Globalization;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using LevelCreation;
-using UnityEngine;
+using Services.DataStorageService;
 
 namespace UI.Screens.LevelSelection
 {
     public class LevelScreenModel
     {
-        private readonly List<LevelData> _levelDatas;
-        public List<LevelDisplayData> LevelDisplayDatas { get; }
+        public List<LevelDisplayData> LevelDisplayDatas { get; private set; }
 
-        public LevelScreenModel(List<LevelData> levelDatas)
+        private readonly List<LevelCreationData> _levelCreationDatas;
+        private readonly IDataStorageService _dataStorageService;
+
+        public LevelScreenModel(List<LevelCreationData> levelCreationDatas, IDataStorageService dataStorageService)
         {
-            _levelDatas = levelDatas;
-            LevelDisplayDatas = GetLevelData();
+            _levelCreationDatas = levelCreationDatas;
+            _dataStorageService = dataStorageService;
         }
 
-        private List<LevelDisplayData> GetLevelData()
+        private async Task<Dictionary<int, LevelStatus>> SetLevelStatusData()
         {
+            var gameData = await _dataStorageService.GetFileContentAsync<GameData>();
+            var levelStatusMap = gameData.levelStatusMap;
+            return levelStatusMap;
+        }
+
+        public async UniTask SetLevelData()
+        {
+            var levelStatusMap = await SetLevelStatusData();
+
             var datas = new List<LevelDisplayData>();
-            for (int i = 0; i < _levelDatas.Count; i++)
+            for (var i = 0; i < _levelCreationDatas.Count; i++)
             {
+                levelStatusMap.TryGetValue(i, out var levelStatus);
+                if(i == 0 && levelStatus.highScore == 0) levelStatus.SetDefault();
+
                 var data = new LevelDisplayData
                 {
                     levelCount = i + 1,
-                    score = (i + 1) * Random.Range(0, 10),
-                    title = _levelDatas[i].title
+                    highScore = levelStatus.highScore,
+                    title = _levelCreationDatas[i].title,
+                    playStatus = levelStatus.playStatus
                 };
                 datas.Add(data);
             }
 
-            return datas;
+            LevelDisplayDatas = datas;
         }
-
     }
 }

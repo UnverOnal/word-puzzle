@@ -10,8 +10,9 @@ namespace LevelCreation
 {
     public class LevelPresenter
     {
-        public List<LevelData> LevelDatas => _levelModel.LevelDatas;
-        public LevelData LevelData { get; private set; }
+        public int CurrentLevelIndex { get; private set; }
+        public List<LevelCreationData> LevelDatas => _levelModel.LevelDatas;
+        public LevelCreationData LevelCreationData { get; private set; }
 
         public List<LetterTile> Tiles => _levelModel.Tiles;
         public List<BlankTile> FormingTiles => _levelModel.FormingTiles;
@@ -40,12 +41,13 @@ namespace LevelCreation
 
         public void CreateLevel(int levelIndex)
         {
-            LevelData = _levelModel.GetLevel(levelIndex);
-            _levelFitter.AlignCamera(LevelData);
+            CurrentLevelIndex = levelIndex;
+            LevelCreationData = _levelModel.GetLevel(levelIndex);
+            _levelFitter.AlignCamera(LevelCreationData);
 
-            for (var i = 0; i < LevelData.tiles.Count; i++)
+            for (var i = 0; i < LevelCreationData.tiles.Count; i++)
             {
-                var tileData = LevelData.tiles[i];
+                var tileData = LevelCreationData.tiles[i];
 
                 var tile = _tilePool.Get();
                 tile.SetTileData(tileData);

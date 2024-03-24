@@ -1,5 +1,6 @@
 using GameState;
 using LevelCreation;
+using Services.DataStorageService;
 using VContainer;
 
 namespace UI.Screens.LevelSelection
@@ -11,16 +12,17 @@ namespace UI.Screens.LevelSelection
 
         [Inject]
         public LevelScreenPresenter(LevelScreenResources resources,
-            LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter) : base(statePresenter)
+            LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter, IDataStorageService dataStorageService) : base(statePresenter)
         {
-            _levelScreenModel = new LevelScreenModel(levelPresenter.LevelDatas);
+            _levelScreenModel = new LevelScreenModel(levelPresenter.LevelDatas, dataStorageService);
             _screenView =
                 new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, statePresenter, levelPresenter);
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             SetStateAction();
+            await _levelScreenModel.SetLevelData();
             _screenView.DisplayLevels(_levelScreenModel.LevelDisplayDatas);
         }
 

@@ -28,23 +28,32 @@ namespace UI.Screens.LevelSelection
 
         public void DisplayLevels(List<LevelDisplayData> levelDisplayDatas)
         {
+            var previousPlayStatus = PlayStatus.Played;
             for (var i = 0; i < levelDisplayDatas.Count; i++)
             {
-                var levelData = levelDisplayDatas[i];
+                var levelDisplayData = levelDisplayDatas[i];
 
                 var levelUiGameObject = LevelUiCreator();
                 var levelUiResources = levelUiGameObject.GetComponent<LevelUiResources>();
 
-                SetLevelUiData(levelUiResources, levelData);
+                SetLevelUiData(levelUiResources, levelDisplayData, previousPlayStatus);
+                previousPlayStatus = levelDisplayData.playStatus;
                 
                 _playButtons.Add(levelUiResources.playButton.gameObject, i);
             }
         }
 
-        private void SetLevelUiData(LevelUiResources levelUiResources, LevelDisplayData levelData)
+        private void SetLevelUiData(LevelUiResources levelUiResources, LevelDisplayData levelData, PlayStatus previousPlayStatus)
         {
             levelUiResources.playButton.onClick.AddListener(OnPlayButtonClicked);
-            levelUiResources.scoreText.text = "High Score : " + levelData.score;
+            levelUiResources.playButton.gameObject.SetActive(previousPlayStatus == PlayStatus.Played);
+            levelUiResources.lockedObject.SetActive(previousPlayStatus is PlayStatus.Locked or PlayStatus.Playable);
+
+            var scoreText = levelData.playStatus == PlayStatus.Played ? "High Score : " + levelData.highScore
+                : previousPlayStatus == PlayStatus.Played ? "No Score"
+                : "Locked Level";
+            
+            levelUiResources.scoreText.text = scoreText;
             levelUiResources.titleLevelCountText.text =
                 "Level " + levelData.levelCount + " - " + UiUtil.FormatString(levelData.title);
         }

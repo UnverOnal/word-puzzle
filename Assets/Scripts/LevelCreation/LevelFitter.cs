@@ -21,9 +21,9 @@ namespace LevelCreation
             _camera = Camera.main;
         }
 
-        public void AlignCamera(LevelData levelData)
+        public void AlignCamera(LevelCreationData levelCreationData)
         {
-            var tiles = levelData.tiles;
+            var tiles = levelCreationData.tiles;
             var orderedTiles = tiles.OrderBy(data => data.position.x).ToList();
             UpdateCamera(orderedTiles);
         }

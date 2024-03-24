@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using Dictionary;
+using GamePlay.Score;
 using GamePlay.TileSystem;
+using GameState;
 using LevelCreation;
+using Services.DataStorageService;
+using UI.Screens.LevelSelection;
 using UnityEngine;
 using VContainer;
 
@@ -12,15 +16,24 @@ namespace GamePlay.FormingArea
         public List<string> CorrectWords => _formingAreaModel.CorrectWords;
         public string Word => _formingAreaModel.CurrentWord;
 
+        private readonly LevelPresenter _levelPresenter;
         private readonly WordDictionary _wordDictionary;
+        private readonly ScorePresenter _scorePresenter;
+        private readonly GameStatePresenter _gameStatePresenter;
+        private readonly IDataStorageService _dataStorageService;
 
         private readonly FormingAreaModel _formingAreaModel;
         private readonly FormingAreaView _formingAreaView;
 
         [Inject]
-        public FormingAreaPresenter(LevelPresenter levelPresenter, WordDictionary wordDictionary)
+        public FormingAreaPresenter(LevelPresenter levelPresenter, WordDictionary wordDictionary,
+            ScorePresenter scorePresenter, GameStatePresenter gameStatePresenter, IDataStorageService dataStorageService)
         {
+            _levelPresenter = levelPresenter;
             _wordDictionary = wordDictionary;
+            _scorePresenter = scorePresenter;
+            _gameStatePresenter = gameStatePresenter;
+            _dataStorageService = dataStorageService;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
             _formingAreaView = new FormingAreaView();
@@ -61,6 +74,24 @@ namespace GamePlay.FormingArea
         {
             DestroyWord();
             _formingAreaModel.AddCurrentWord();
+        }
+
+        public async void OnLevelEnd(int remainingLetterCount)
+        {
+            _scorePresenter.CalculateScores(CorrectWords, remainingLetterCount);
+            Debug.Log("Score : " + _scorePresenter.Score);
+            Debug.Log("Level End");
+
+            var data = await _dataStorageService.GetFileContentAsync<GameData>();
+            data.levelStatusMap.TryGetValue(_levelPresenter.CurrentLevelIndex, out var levelStatus);
+            levelStatus.highScore = levelStatus.highScore < _scorePresenter.Score
+                ? _scorePresenter.Score
+                : levelStatus.highScore;
+            levelStatus.playStatus = PlayStatus.Played;
+            data.levelStatusMap.Add(_levelPresenter.CurrentLevelIndex, levelStatus);
+            _dataStorageService.SetFileContent(data);
+
+            _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);
         }
 
         private void DestroyWord()

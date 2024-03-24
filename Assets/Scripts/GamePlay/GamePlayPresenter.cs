@@ -2,7 +2,6 @@ using System;
 using Dictionary;
 using GameManagement;
 using GamePlay.FormingArea;
-using GamePlay.Score;
 using GamePlay.TileSystem;
 using LevelCreation;
 using Services.CommandService;
@@ -20,7 +19,6 @@ namespace GamePlay
         private readonly LevelPresenter _levelPresenter;
         private readonly WordDictionary _wordDictionary;
         private readonly FormingAreaPresenter _formingAreaPresenter;
-        private readonly ScorePresenter _scorePresenter;
 
         private readonly GamePlayModel _gamePlayModel;
         private readonly PossibleMoveTracker _possibleMoveTracker;
@@ -30,14 +28,13 @@ namespace GamePlay
         [Inject]
         public GamePlayPresenter(IInputService inputService, IPoolService poolService, ICommandService commandService,
             LevelPresenter levelPresenter, GameSettings gameSettings, WordDictionary wordDictionary,
-            FormingAreaPresenter formingAreaPresenter, ScorePresenter scorePresenter)
+            FormingAreaPresenter formingAreaPresenter)
         {
             _inputService = inputService;
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
             _wordDictionary = wordDictionary;
             _formingAreaPresenter = formingAreaPresenter;
-            _scorePresenter = scorePresenter;
 
             _gamePlayModel = new GamePlayModel(_levelPresenter);
 
@@ -106,12 +103,7 @@ namespace GamePlay
 
             var isLevelEnd = !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles) || _gamePlayModel.Tiles.Count < 1;
             if (isLevelEnd)
-            {
-                var remainingLetterCount = _gamePlayModel.Tiles.Count;
-                _scorePresenter.CalculateScores(_formingAreaPresenter.CorrectWords, remainingLetterCount);
-                Debug.Log("Score : " + _scorePresenter.Score);
-                Debug.Log("Level End");
-            }
+                _formingAreaPresenter.OnLevelEnd(_gamePlayModel.Tiles.Count);
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)

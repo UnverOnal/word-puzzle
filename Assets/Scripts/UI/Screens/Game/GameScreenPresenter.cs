@@ -1,3 +1,4 @@
+using System;
 using GamePlay;
 using GameState;
 using LevelCreation;
@@ -29,25 +30,22 @@ namespace UI.Screens.Game
             SubscribeButtons();
         }
 
-        public void UpdateScore(int score)
-        {
-            _screenView.SetScore(score);
-        }
-
-        public void InitializeLevelEnd()
-        {
-            _levelEndPresenter.Initialize();
-        }
-
         protected override void OnStateUpdate(GameState.GameState gameState)
         {
-            if (gameState == GameState.GameState.Game)
+            switch (gameState)
             {
-                _screenView.SetLevelTitle();
-                _screenView.Enable();
+                case GameState.GameState.Game:
+                    _screenView.SetLevelTitle();
+                    _screenView.Enable();
+                    break;
+                case GameState.GameState.LevelEnd:
+                    _levelEndPresenter.Initialize();
+                    break;
+                default:
+                    _screenView.Disable();
+                    _levelEndPresenter.Close();
+                    break;
             }
-            else if (_screenView.IsActive)
-                _screenView.Disable();
         }
 
         private void SubscribeButtons()

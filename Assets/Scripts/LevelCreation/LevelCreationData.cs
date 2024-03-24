@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace LevelCreation
 {
-    public class LevelData
+    public class LevelCreationData
     {
         public string title;
         public List<TileData> tiles;
