@@ -1,5 +1,5 @@
-using System;
 using GamePlay;
+using GamePlay.Score;
 using GameState;
 using LevelCreation;
 using UI.Screens.Game.LevelEnd;
@@ -9,25 +9,28 @@ namespace UI.Screens.Game
 {
     public class GameScreenPresenter : ScreenPresenter, IScreenPresenter
     {
+        [Inject] private readonly GamePlayPresenter _gamePlayPresenter;
+
         private readonly GameScreenResources _resources;
-        private readonly GamePlayPresenter _gamePlayPresenter;
+        private readonly ScorePresenter _scorePresenter;
         private readonly GameScreenView _screenView;
         private readonly LevelEndPresenter _levelEndPresenter;
 
         [Inject]
         public GameScreenPresenter(GameScreenResources resources, GameStatePresenter statePresenter,
-            GamePlayPresenter gamePlayPresenter, LevelPresenter levelPresenter) : base(statePresenter)
+            LevelPresenter levelPresenter, ScorePresenter scorePresenter) : base(statePresenter)
         {
             _resources = resources;
-            _gamePlayPresenter = gamePlayPresenter;
+            _scorePresenter = scorePresenter;
             _screenView = new GameScreenView(resources, levelPresenter);
-            _levelEndPresenter = new LevelEndPresenter(resources.levelEndResources, statePresenter);
+            _levelEndPresenter = new LevelEndPresenter(resources.levelEndResources, statePresenter, scorePresenter);
         }
 
         public void Initialize()
         {
             SetStateAction();
             SubscribeButtons();
+            _scorePresenter.OnScoreUpdated += _screenView.SetScore;
         }
 
         protected override void OnStateUpdate(GameState.GameState gameState)
@@ -35,10 +38,13 @@ namespace UI.Screens.Game
             switch (gameState)
             {
                 case GameState.GameState.Game:
+                    _scorePresenter.Reset();
                     _screenView.SetLevelTitle();
                     _screenView.Enable();
+                    _resources.inGameObject.SetActive(true);
                     break;
                 case GameState.GameState.LevelEnd:
+                    _resources.inGameObject.SetActive(false);
                     _levelEndPresenter.Initialize();
                     break;
                 default:
@@ -54,7 +60,7 @@ namespace UI.Screens.Game
             _resources.undoButton.OnHold += _gamePlayPresenter.UndoAll;
             _resources.submitButton.onClick.AddListener(_gamePlayPresenter.Submit);
         }
-        
+
         private void UnsubscribeButtons()
         {
             _resources.undoButton.OnClick -= _gamePlayPresenter.Undo;
@@ -66,6 +72,7 @@ namespace UI.Screens.Game
         {
             base.Dispose();
             UnsubscribeButtons();
+            _scorePresenter.OnScoreUpdated -= _screenView.SetScore;
         }
     }
 }

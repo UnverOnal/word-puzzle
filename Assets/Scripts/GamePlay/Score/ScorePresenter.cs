@@ -1,44 +1,58 @@
-using System.Collections.Generic;
+using System;
+using LevelCreation;
+using Services.DataStorageService;
+using VContainer;
 
 namespace GamePlay.Score
 {
     public class ScorePresenter
     {
+        public event Action<int> OnScoreUpdated;
         public int Score => _scoreModel.Score;
-        
+        public int HighScore => _scoreModel.HighScore;
+
         private readonly ScoreData _scoreData;
         private readonly ScoreModel _scoreModel;
 
-        public ScorePresenter(ScoreData scoreData)
+        [Inject]
+        public ScorePresenter(ScoreData scoreData, LevelPresenter levelPresenter, IDataStorageService dataStorageService)
         {
             _scoreData = scoreData;
-            _scoreModel = new ScoreModel();
+            _scoreModel = new ScoreModel(dataStorageService ,levelPresenter);
         }
 
-        public void CalculateScores(List<string> words, int remainingLetterCount)
+        public void CalculateScore(string word)
         {
-            var totalPoint = 0;
-            for (int i = 0; i < words.Count; i++)
+            var wordPoint = 0;
+            var letters = word.ToCharArray();
+            for (var j = 0; j < letters.Length; j++)
             {
-                var word = words[i];
-                var letters = word.ToCharArray();
-                for (int j = 0; j < letters.Length; j++)
-                {
-                    var letter = letters[j];
-                    var point = GetLetterPoint(letter);
-                    var wordPoint = _scoreData.fixedFactor * word.Length * point;
-                    totalPoint += wordPoint;
-                }
+                var letter = letters[j];
+                var point = GetLetterPoint(letter);
+                wordPoint += _scoreData.fixedFactor * word.Length * point;
             }
 
-            totalPoint -= remainingLetterCount * _scoreData.punishmentPoint;
-            _scoreModel.UpdateScore(totalPoint);
+            _scoreModel.AddPoint(wordPoint);
+            OnScoreUpdated?.Invoke(_scoreModel.Score);
         }
-        
+
+        public void CalculateTotalScore(int remainingLetterCount)
+        {
+            var totalPoints = _scoreModel.Score;
+            totalPoints -= remainingLetterCount * _scoreData.punishmentPoint;
+            _scoreModel.UpdateScore(totalPoints);
+        }
+
+        public void Reset()
+        {
+            OnScoreUpdated?.Invoke(_scoreModel.Score);
+            _scoreModel.Reset();
+        }
+
         private int GetLetterPoint(char letter)
         {
             var letterDatas = _scoreData.letterDatas;
-            for (int i = 0; i < letterDatas.Length; i++)
+            for (var i = 0; i < letterDatas.Length; i++)
             {
                 var letterData = letterDatas[i];
                 if (letterData.letter.Equals(char.ToLower(letter)))

@@ -30,7 +30,7 @@ namespace GamePlay
         {
             _letterTile = letterTile;
             _transform = letterTile.GameObject.transform;
-            _targetPosition = targetPosition;
+            _targetPosition = targetPosition + Vector3.forward * -1f;
             _initialPosition = _transform.position;
 
             _duration = CalculateDuration();

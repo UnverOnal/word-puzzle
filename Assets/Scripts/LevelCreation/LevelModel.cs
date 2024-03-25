@@ -8,7 +8,7 @@ namespace LevelCreation
     {
         public List<LevelCreationData> LevelDatas { get; private set; }
         
-        public List<LetterTile> Tiles { get; }
+        public List<LetterTile> LetterTiles { get; }
         public List<BlankTile> FormingTiles { get; set; }
 
         private readonly IConverter _jsonConverter;
@@ -19,7 +19,7 @@ namespace LevelCreation
             _jsonConverter = fileConversionService.GetConverter(ConverterType.JsonConverter);
             _levelAssets = levelAssets;
 
-            Tiles = new List<LetterTile>();
+            LetterTiles = new List<LetterTile>();
         }
 
         public void CreateLevelData()
@@ -37,6 +37,15 @@ namespace LevelCreation
         public LevelCreationData GetLevel(int index)
         {
             return LevelDatas[index];
+        }
+
+        public List<Tile> GetAllTiles()
+        {
+            var tiles = new List<Tile>();
+            tiles.AddRange(LetterTiles);
+            tiles.AddRange(FormingTiles);
+
+            return tiles;
         }
     }
 }

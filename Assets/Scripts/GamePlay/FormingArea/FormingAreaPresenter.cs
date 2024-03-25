@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Dictionary;
 using GamePlay.Score;
 using GamePlay.TileSystem;
 using GameState;
@@ -14,30 +13,25 @@ namespace GamePlay.FormingArea
 {
     public class FormingAreaPresenter
     {
-        public List<string> CorrectWords => _formingAreaModel.CorrectWords;
         public string Word => _formingAreaModel.CurrentWord;
 
         private readonly LevelPresenter _levelPresenter;
-        private readonly WordDictionary _wordDictionary;
         private readonly ScorePresenter _scorePresenter;
         private readonly GameStatePresenter _gameStatePresenter;
         private readonly IDataStorageService _dataStorageService;
 
         private readonly FormingAreaModel _formingAreaModel;
-        private readonly FormingAreaView _formingAreaView;
 
         [Inject]
-        public FormingAreaPresenter(LevelPresenter levelPresenter, WordDictionary wordDictionary,
+        public FormingAreaPresenter(LevelPresenter levelPresenter,
             ScorePresenter scorePresenter, GameStatePresenter gameStatePresenter, IDataStorageService dataStorageService)
         {
             _levelPresenter = levelPresenter;
-            _wordDictionary = wordDictionary;
             _scorePresenter = scorePresenter;
             _gameStatePresenter = gameStatePresenter;
             _dataStorageService = dataStorageService;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
-            _formingAreaView = new FormingAreaView();
         }
 
         public void AddLetter(LetterTile letterTile)
@@ -73,15 +67,16 @@ namespace GamePlay.FormingArea
 
         public void SubmitWord()
         {
+            _scorePresenter.CalculateScore(_formingAreaModel.CurrentWord);
             DestroyWord();
             _formingAreaModel.AddCurrentWord();
         }
 
         public async void OnLevelEnd(int remainingLetterCount)
         {
-            _scorePresenter.CalculateScores(CorrectWords, remainingLetterCount);
-            Debug.Log("Score : " + _scorePresenter.Score);
-            Debug.Log("Level End");
+            _scorePresenter.CalculateTotalScore(remainingLetterCount);
+            // Debug.Log("Score : " + _scorePresenter.Score);
+            // Debug.Log("Level End");
 
             await UpdateLevelStatusData();
             _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);

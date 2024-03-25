@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameManagement;
+using GamePlay.TileSystem;
 using UnityEngine;
 
 namespace LevelCreation
@@ -8,7 +9,7 @@ namespace LevelCreation
     public class LevelFitter
     {
         public Vector3 BoundsCenter => _bounds.center;
-        
+
         private readonly float _cameraSizeOffset;
         private readonly Vector3 _cameraPositionOffset;
         private readonly Camera _camera;
@@ -21,14 +22,14 @@ namespace LevelCreation
             _camera = Camera.main;
         }
 
-        public void AlignCamera(LevelCreationData levelCreationData)
+        public void AlignCamera(IReadOnlyList<Tile> tiles)
         {
-            var tiles = levelCreationData.tiles;
-            var orderedTiles = tiles.OrderBy(data => data.position.x).ToList();
-            UpdateCamera(orderedTiles);
+            // var tiles = levelCreationData.tiles;
+            // var orderedTiles = tiles.OrderBy(data => data.position.x).ToList();
+            UpdateCamera(tiles);
         }
         
-        private void UpdateCamera(IReadOnlyList<TileData> tiles)
+        private void UpdateCamera(IReadOnlyList<Tile> tiles)
         {
             _bounds = CalculateBounds(tiles);
 
@@ -37,19 +38,19 @@ namespace LevelCreation
             SetCamera(cameraPosition, orthographicSize);
         }
         
-        private Bounds CalculateBounds(IReadOnlyList<TileData> tiles)
+        private Bounds CalculateBounds(IReadOnlyList<Tile> tiles)
         {
-            var minPosition = new Vector2(tiles[0].position.x, tiles[0].position.y);
-            var maxPosition = new Vector2(tiles[0].position.x, tiles[0].position.y);
+            var minPosition = tiles[0].Position;
+            var maxPosition = tiles[0].Position;
 
             for (int i = 0; i < tiles.Count; i++)
             {
                 var tile = tiles[i];
                 
-                minPosition.x = Mathf.Min(minPosition.x, tile.position.x);
-                minPosition.y = Mathf.Min(minPosition.y, tile.position.y);
-                maxPosition.x = Mathf.Max(maxPosition.x, tile.position.x);
-                maxPosition.y = Mathf.Max(maxPosition.y, tile.position.y);
+                minPosition.x = Mathf.Min(minPosition.x, tile.Position.x);
+                minPosition.y = Mathf.Min(minPosition.y, tile.Position.y);
+                maxPosition.x = Mathf.Max(maxPosition.x, tile.Position.x);
+                maxPosition.y = Mathf.Max(maxPosition.y, tile.Position.y);
             }
 
             var bounds = new Bounds

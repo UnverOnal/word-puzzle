@@ -9,9 +9,10 @@ namespace UI.Screens.Game.LevelEnd
             _resources = resources;
         }
 
-        public void SetHighScore(int highScore)
+        public void SetScore(int score, bool isHighScore)
         {
-            _resources.highScore.text = "High Score : " + highScore;
+            var scoreText = isHighScore ? "High Score : " + score : "Score : " + score;
+            _resources.highScore.text = scoreText;
         }
     }
 }

@@ -7,15 +7,13 @@ namespace UI.LoadingProgress
 {
     public class ProgressPresenter : IInitializable, IDisposable
     {
-        private readonly ISceneService _sceneService;
+        [Inject] private readonly ISceneService _sceneService;
 
         private readonly ProgressView _progressView;
 
         [Inject]
-        public ProgressPresenter(ProgressResources progressResources, ISceneService sceneService)
+        public ProgressPresenter(ProgressResources progressResources)
         {
-            _sceneService = sceneService;
-
             _progressView = new ProgressView(progressResources);
         }
 

@@ -14,37 +14,37 @@ namespace GamePlay
 {
     public class GamePlayPresenter : IDisposable
     {
-        private readonly IInputService _inputService;
+        [Inject] private readonly IInputService _inputService;
+        [Inject] private IPoolService _poolService;
+        [Inject] private GameSettings _gameSettings;
+        [Inject] private readonly FormingAreaPresenter _formingAreaPresenter;
+
         private readonly CommandInvoker _commandInvoker;
         private readonly LevelPresenter _levelPresenter;
         private readonly WordDictionary _wordDictionary;
-        private readonly FormingAreaPresenter _formingAreaPresenter;
 
         private readonly GamePlayModel _gamePlayModel;
         private readonly PossibleMoveTracker _possibleMoveTracker;
 
-        private readonly ObjectPool<MoveCommand> _moveCommandPool;
+        private ObjectPool<MoveCommand> _moveCommandPool;
 
         [Inject]
-        public GamePlayPresenter(IInputService inputService, IPoolService poolService, ICommandService commandService,
-            LevelPresenter levelPresenter, GameSettings gameSettings, WordDictionary wordDictionary,
-            FormingAreaPresenter formingAreaPresenter)
+        public GamePlayPresenter(ICommandService commandService,
+            LevelPresenter levelPresenter, WordDictionary wordDictionary)
         {
-            _inputService = inputService;
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
             _wordDictionary = wordDictionary;
-            _formingAreaPresenter = formingAreaPresenter;
 
-            _gamePlayModel = new GamePlayModel(_levelPresenter);
-
-            _moveCommandPool = poolService.GetPoolFactory().CreatePool(() => new MoveCommand(gameSettings.moveData));
+            _gamePlayModel = new GamePlayModel(levelPresenter);
 
             _possibleMoveTracker = new PossibleMoveTracker(wordDictionary);
         }
 
         public void Initialize()
         {
+            _moveCommandPool = _poolService.GetPoolFactory().CreatePool(() => new MoveCommand(_gameSettings.moveData));
+            
             _inputService.OnItemPicked += OnTileSelected;
         }
 
@@ -106,6 +106,7 @@ namespace GamePlay
             {
                 _formingAreaPresenter.OnLevelEnd(_gamePlayModel.Tiles.Count);
                 _levelPresenter.ReturnTile(_gamePlayModel.Tiles);
+                _gamePlayModel.Reset();
             }
         }
 

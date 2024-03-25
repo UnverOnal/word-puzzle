@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dictionaryTextFile: {fileID: 4900000, guid: 1a84ba0babd5fff48a75afc4f6933887, type: 3}
   dictionaryConverted: 1
+  minimumWordSize: 2

@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using GameState;
 using LevelCreation;
 using Services.DataStorageService;
-using UnityEngine;
 using VContainer;
 
 namespace UI.Screens.LevelSelection
@@ -14,9 +13,11 @@ namespace UI.Screens.LevelSelection
 
         [Inject]
         public LevelScreenPresenter(LevelScreenResources resources,
-            LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter, IDataStorageService dataStorageService) : base(statePresenter)
+            LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter,
+            IDataStorageService dataStorageService) : base(statePresenter)
         {
             _levelScreenModel = new LevelScreenModel(levelPresenter.LevelDatas, dataStorageService);
+
             _screenView =
                 new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, statePresenter, levelPresenter);
         }
@@ -33,8 +34,10 @@ namespace UI.Screens.LevelSelection
                 await SetLevelUis();
                 _screenView.Enable();
             }
-            else if(_screenView.IsActive)
+            else if (_screenView.IsActive)
+            {
                 _screenView.Disable();
+            }
         }
 
         private async UniTask SetLevelUis()

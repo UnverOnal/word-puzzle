@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GamePlay.TileSystem;
 using LevelCreation;
+using UnityEngine;
 
 namespace GamePlay
 {
@@ -26,6 +27,11 @@ namespace GamePlay
         public void RemoveTile(LetterTile tile)
         {
             Tiles.Remove(tile);
+        }
+
+        public void Reset()
+        {
+            Tiles.Clear();
         }
     }
 }

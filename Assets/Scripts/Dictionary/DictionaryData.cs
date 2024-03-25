@@ -7,8 +7,8 @@ namespace Dictionary
     [CreateAssetMenu(fileName = "NewDictionary", menuName = "ScriptableObjects/NewDictionary")]
     public class DictionaryData : ScriptableObject
     {
-        [SerializeField] private TextAsset dictionaryTextFile; 
-        [HideInInspector]public bool dictionaryConverted;
+        [SerializeField] private TextAsset dictionaryTextFile;
+        [HideInInspector] public bool dictionaryConverted;
         [HideInInspector] public int minimumWordSize = int.MaxValue;
 
         public List<string> DictionaryWords { get; private set; }
@@ -23,7 +23,7 @@ namespace Dictionary
 
             DictionaryWords = new List<string>();
 
-            var words = dictionaryTextFile.text.Split(new char[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var words = dictionaryTextFile.text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             for (var i = 0; i < words.Length; i++)
             {
@@ -42,5 +42,13 @@ namespace Dictionary
             if (minimumWordSize > word.Length)
                 minimumWordSize = word.Length;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (DictionaryWords == null || DictionaryWords.Count == 0)
+                ConvertDictionaryToList();
+        }
+#endif
     }
 }
