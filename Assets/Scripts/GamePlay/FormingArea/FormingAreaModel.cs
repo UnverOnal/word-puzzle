@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GamePlay.TileSystem;
 using LevelCreation;
+using UnityEngine;
 
 namespace GamePlay.FormingArea
 {
@@ -10,7 +11,8 @@ namespace GamePlay.FormingArea
         public List<LetterTile> LetterTiles { get; }
         public List<string> CorrectWords { get; }
         public string CurrentWord { get; private set; }
-        public int OccupiedIndex { get; private set; }
+        
+        private int OccupiedIndex { get; set; }
 
         private readonly LevelPresenter _levelPresenter;
 
@@ -46,14 +48,15 @@ namespace GamePlay.FormingArea
             OccupiedIndex = 0;
         }
 
-        public void AddCurrentWord()
-        {
-            CorrectWords.Add(CurrentWord);
-        }
+        public void AddCurrentWord() => CorrectWords.Add(CurrentWord);
 
-        public void ResetWordsAll()
+        public void ResetWordsAll() => CorrectWords.Clear();
+
+        public Vector3 GetNextFreePosition()
         {
-            CorrectWords.Clear();
+            var nextTile = FormingTiles[OccupiedIndex];
+            var position = nextTile.GameObject.transform.position;
+            return position;
         }
     }
 }

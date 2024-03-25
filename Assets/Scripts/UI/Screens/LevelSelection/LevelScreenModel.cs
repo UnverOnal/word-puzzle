@@ -22,7 +22,7 @@ namespace UI.Screens.LevelSelection
             LevelDisplayDatas = new List<LevelDisplayData>();
         }
 
-        private async Task<Dictionary<int, LevelStatus>> SetLevelStatusData()
+        private async Task<Dictionary<int, LevelData>> SetLevelStatusData()
         {
             var gameData = await _dataStorageService.GetFileContentAsync<GameData>();
             var levelStatusMap = gameData.levelStatusMap;

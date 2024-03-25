@@ -12,7 +12,7 @@ namespace LevelCreation
     {
         private readonly GameSettings _gameSettings;
         public int CurrentLevelIndex { get; private set; }
-        public List<LevelCreationData> LevelDatas => _levelModel.LevelDatas;
+        public List<LevelCreationData> LevelDatas => _levelModel.LevelCreationDatas;
         public LevelCreationData LevelCreationData { get; private set; }
 
         public List<LetterTile> Tiles => _levelModel.LetterTiles;
@@ -35,7 +35,7 @@ namespace LevelCreation
             _levelView = new LevelView(gameSettings, levelAssets);
             _levelFitter = new LevelFitter(gameSettings);
 
-            _levelModel.CreateLevelData();
+            _levelModel.CreateLevelCreationData();
 
             CreateTilePools(poolService, levelAssets, gameSettings);
         }

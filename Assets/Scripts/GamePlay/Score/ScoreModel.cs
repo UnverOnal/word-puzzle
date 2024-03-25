@@ -40,8 +40,8 @@ namespace GamePlay.Score
             var data = await _dataStorageService.GetFileContentAsync<GameData>();
 
             var levelIndex = _levelPresenter.CurrentLevelIndex;
-            var isExist = data.levelStatusMap.TryGetValue(levelIndex, out var levelStatus);
-            if(!isExist) levelStatus.SetDefault();
+            var exist = data.levelStatusMap.TryGetValue(levelIndex, out var levelStatus);
+            if(!exist) levelStatus.SetDefault();
             HighScore =levelStatus.highScore;
         }
     }

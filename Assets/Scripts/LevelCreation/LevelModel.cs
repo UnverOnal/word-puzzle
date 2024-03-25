@@ -6,7 +6,7 @@ namespace LevelCreation
 {
     public class LevelModel
     {
-        public List<LevelCreationData> LevelDatas { get; private set; }
+        public List<LevelCreationData> LevelCreationDatas { get; private set; }
         
         public List<LetterTile> LetterTiles { get; }
         public List<BlankTile> FormingTiles { get; set; }
@@ -22,30 +22,21 @@ namespace LevelCreation
             LetterTiles = new List<LetterTile>();
         }
 
-        public void CreateLevelData()
+        public void CreateLevelCreationData()
         {
-            LevelDatas = new List<LevelCreationData>();
+            LevelCreationDatas = new List<LevelCreationData>();
             var levelDataFiles = _levelAssets.levelDataFiles;
             for (int i = 0; i < levelDataFiles.Length; i++)
             {
                 var file = levelDataFiles[i];
                 var convertedData = _jsonConverter.GetData<LevelCreationData>(file);
-                LevelDatas.Add(convertedData);
+                LevelCreationDatas.Add(convertedData);
             }
         }
 
         public LevelCreationData GetLevel(int index)
         {
-            return LevelDatas[index];
-        }
-
-        public List<Tile> GetAllTiles()
-        {
-            var tiles = new List<Tile>();
-            tiles.AddRange(LetterTiles);
-            tiles.AddRange(FormingTiles);
-
-            return tiles;
+            return LevelCreationDatas[index];
         }
     }
 }

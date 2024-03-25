@@ -5,10 +5,10 @@ namespace Services.DataStorageService
 {
     public class GameData : LocalSaveData
     {
-        public Dictionary<int, LevelStatus> levelStatusMap = new();
+        public Dictionary<int, LevelData> levelStatusMap = new();
     }
 
-    public struct LevelStatus
+    public struct LevelData
     {
         public int highScore;
         public PlayStatus playStatus;

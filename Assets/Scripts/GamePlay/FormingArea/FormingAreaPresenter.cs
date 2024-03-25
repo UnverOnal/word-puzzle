@@ -14,10 +14,12 @@ namespace GamePlay.FormingArea
     public class FormingAreaPresenter
     {
         public string Word => _formingAreaModel.CurrentWord;
+        public Vector3 NextFreePosition => _formingAreaModel.GetNextFreePosition();
 
+        [Inject] private readonly ScorePresenter _scorePresenter;
+        [Inject] private readonly GameStatePresenter _gameStatePresenter;
+        
         private readonly LevelPresenter _levelPresenter;
-        private readonly ScorePresenter _scorePresenter;
-        private readonly GameStatePresenter _gameStatePresenter;
         private readonly IDataStorageService _dataStorageService;
 
         private readonly FormingAreaModel _formingAreaModel;
@@ -25,21 +27,18 @@ namespace GamePlay.FormingArea
 
         [Inject]
         public FormingAreaPresenter(LevelPresenter levelPresenter,
-            ScorePresenter scorePresenter, GameStatePresenter gameStatePresenter, IDataStorageService dataStorageService)
+            IDataStorageService dataStorageService)
         {
             _levelPresenter = levelPresenter;
-            _scorePresenter = scorePresenter;
-            _gameStatePresenter = gameStatePresenter;
             _dataStorageService = dataStorageService;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
             _formingAreaView = new FormingAreaView();
         }
 
-        public void AddLetter(LetterTile letterTile)
-        {
-            _formingAreaModel.AddCharacter(letterTile);
-        }
+        public void Reset() => _formingAreaModel.ResetWord();
+        public bool IsAlreadyGiven(string word) => _formingAreaModel.CorrectWords.Contains(word);
+        public void AddLetter(LetterTile letterTile) => _formingAreaModel.AddCharacter(letterTile);
 
         public LetterTile TakeLetter()
         {
@@ -55,22 +54,12 @@ namespace GamePlay.FormingArea
             return letters;
         }
 
-        public void Reset()
-        {
-            _formingAreaModel.ResetWord();
-        }
-
-        public Vector3 GetNextFreePosition()
-        {
-            var nextTile = _formingAreaModel.FormingTiles[_formingAreaModel.OccupiedIndex];
-            var position = nextTile.GameObject.transform.position;
-            return position;
-        }
-
         public async UniTask SubmitWord()
         {
             _scorePresenter.CalculateScore(_formingAreaModel.CurrentWord);
-            await DestroyWord();
+            var letterTiles = _formingAreaModel.LetterTiles;
+            await _formingAreaView.DestroyWord(letterTiles);
+            _levelPresenter.ReturnTile(letterTiles);
             _formingAreaModel.AddCurrentWord();
         }
 
@@ -78,39 +67,27 @@ namespace GamePlay.FormingArea
         {
             _scorePresenter.CalculateTotalScore(remainingLetterCount);
 
-            await UpdateLevelStatusData();
+            await UpdateLevelData();
             _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);
             _levelPresenter.ReturnTile(_formingAreaModel.FormingTiles);
             _formingAreaModel.ResetWordsAll();
         }
 
-        public bool IsAlreadyGiven(string word)
-        {
-            return _formingAreaModel.CorrectWords.Contains(word);
-        }
-
-        private async UniTask DestroyWord()
-        {
-            var letters = _formingAreaModel.LetterTiles;
-            await _formingAreaView.DestroyWord(letters);
-            _levelPresenter.ReturnTile(letters);
-        }
-
-        private async UniTask UpdateLevelStatusData()
+        private async UniTask UpdateLevelData()
         {
             var data = await _dataStorageService.GetFileContentAsync<GameData>();
-            var isExist = data.levelStatusMap.TryGetValue(_levelPresenter.CurrentLevelIndex, out var levelStatus);
-            
-            levelStatus.highScore = levelStatus.highScore < _scorePresenter.Score
-                ? _scorePresenter.Score
-                : levelStatus.highScore;
-            levelStatus.playStatus = PlayStatus.Played;
+            var exist = data.levelStatusMap.TryGetValue(_levelPresenter.CurrentLevelIndex, out var levelData);
 
-            if (!isExist)
-                data.levelStatusMap.Add(_levelPresenter.CurrentLevelIndex, levelStatus);
+            levelData.highScore = levelData.highScore < _scorePresenter.Score
+                ? _scorePresenter.Score
+                : levelData.highScore;
+            levelData.playStatus = PlayStatus.Played;
+
+            if (!exist)
+                data.levelStatusMap.Add(_levelPresenter.CurrentLevelIndex, levelData);
             else
-                data.levelStatusMap[_levelPresenter.CurrentLevelIndex] = levelStatus;
-            
+                data.levelStatusMap[_levelPresenter.CurrentLevelIndex] = levelData;
+
             _dataStorageService.SetFileContent(data);
         }
     }

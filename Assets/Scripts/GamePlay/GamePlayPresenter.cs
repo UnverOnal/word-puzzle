@@ -65,7 +65,7 @@ namespace GamePlay
         {
             var moveCommand = _moveCommandPool.Get();
 
-            var targetPosition = _formingAreaPresenter.GetNextFreePosition();
+            var targetPosition = _formingAreaPresenter.NextFreePosition;
             moveCommand.SetMoveData(tile, targetPosition);
             _commandInvoker.ExecuteCommand(moveCommand);
 
