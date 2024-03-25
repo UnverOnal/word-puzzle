@@ -40,7 +40,7 @@ namespace GamePlay
             _gameSettings = gameSettings;
 
             _gamePlayModel = new GamePlayModel(levelPresenter);
-            _gamePlayView = new GamePlayView(_gameSettings);
+            _gamePlayView = new GamePlayView(gameSettings);
 
             _possibleMoveTracker = new PossibleMoveTracker(wordDictionary);
         }
@@ -48,7 +48,7 @@ namespace GamePlay
         public void Initialize()
         {
             _moveCommandPool = _poolService.GetPoolFactory().CreatePool(() => new MoveCommand(_gameSettings.moveData));
-            
+
             _inputService.OnItemPicked += OnTileSelected;
         }
 
@@ -100,11 +100,16 @@ namespace GamePlay
             }
 
             // Returns commands to the pool
-             while (_commandInvoker.Commands.Count > 0)
-                 _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
+            while (_commandInvoker.Commands.Count > 0)
+                _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
 
             _formingAreaPresenter.Reset();
 
+            CheckLevelEnd();
+        }
+
+        private void CheckLevelEnd()
+        {
             var isLevelEnd = !_possibleMoveTracker.IsPossible(_gamePlayModel.Tiles) || _gamePlayModel.Tiles.Count < 1;
             if (isLevelEnd)
             {

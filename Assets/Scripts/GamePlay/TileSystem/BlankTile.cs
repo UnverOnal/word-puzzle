@@ -12,20 +12,14 @@ namespace GamePlay.TileSystem
             Sprite = GameObject.GetComponent<SpriteRenderer>().sprite;
         }
 
-        public void SetPosition(Vector3 position)
-        {
-            GameObject.transform.position = position;
-        }
-
         public override void Initialize()
         {
             GameObject.SetActive(true);
             GameObject.transform.position = Vector3.zero;
         }
+        
+        public void SetPosition(Vector3 position) => GameObject.transform.position = position;
 
-        public override void Reset()
-        {
-            GameObject.SetActive(false);
-        }
+        public override void Reset() => GameObject.SetActive(false);
     }
 }

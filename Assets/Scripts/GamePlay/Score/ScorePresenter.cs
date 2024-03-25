@@ -11,13 +11,13 @@ namespace GamePlay.Score
         public int Score => _scoreModel.Score;
         public int HighScore => _scoreModel.HighScore;
 
-        private readonly ScoreData _scoreData;
+        [Inject] private readonly ScoreData _scoreData;
+        
         private readonly ScoreModel _scoreModel;
 
         [Inject]
-        public ScorePresenter(ScoreData scoreData, LevelPresenter levelPresenter, IDataStorageService dataStorageService)
+        public ScorePresenter(LevelPresenter levelPresenter, IDataStorageService dataStorageService)
         {
-            _scoreData = scoreData;
             _scoreModel = new ScoreModel(dataStorageService ,levelPresenter);
         }
 
@@ -40,7 +40,7 @@ namespace GamePlay.Score
         {
             var totalPoints = _scoreModel.Score;
             totalPoints -= remainingLetterCount * _scoreData.punishmentPoint;
-            _scoreModel.UpdateScore(totalPoints);
+            _scoreModel.SetScore(totalPoints);
         }
 
         public void Reset()

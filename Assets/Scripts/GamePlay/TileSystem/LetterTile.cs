@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using LevelCreation;
-using Services.DataStorageService;
 using TMPro;
 using UnityEngine;
 
@@ -29,12 +28,11 @@ namespace GamePlay.TileSystem
                 _charText = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
         }
-
-        public void SetTileData(TileData tileData)
-        {
-            _tileData = tileData;
-        }
         
+        public bool IsSame(GameObject gameObject) => gameObject == GameObject;
+
+        public void SetTileData(TileData tileData) => _tileData = tileData;
+
         public override void Initialize()
         {
             GameObject.SetActive(true);
@@ -77,7 +75,8 @@ namespace GamePlay.TileSystem
             while (_childrenTiles.Count > 0)
             {
                 var tile = _childrenTiles[^1];
-                RemoveChild(tile);
+                _childrenTiles.Remove(tile);
+                tile.RemoveParent(this);
             }
         }
 
@@ -85,12 +84,6 @@ namespace GamePlay.TileSystem
         {
             _childrenTiles.Add(letterTile);
             letterTile.AddParent(this);
-        }
-
-        public void RemoveChild(LetterTile letterTile)
-        {
-            _childrenTiles.Remove(letterTile);
-            letterTile.RemoveParent(this);
         }
 
         private void AddParent(LetterTile letterTile)
@@ -109,8 +102,6 @@ namespace GamePlay.TileSystem
                 MakeInteractable(true);
         }
 
-        public bool IsSame(GameObject gameObject) => gameObject == GameObject;
-        
         private void SetPosition()
         {
             var position = _tileData.position;

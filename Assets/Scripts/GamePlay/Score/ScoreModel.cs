@@ -19,15 +19,9 @@ namespace GamePlay.Score
             GetHighScore();
         }
 
-        public void UpdateScore(int score)
-        {
-            Score = score;
-        }
+        public void SetScore(int score) => Score = score;
 
-        public void AddPoint(int point)
-        {
-            Score += point;
-        }
+        public void AddPoint(int point) => Score += point;
 
         public void Reset()
         {
