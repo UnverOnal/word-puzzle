@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,18 +11,16 @@ namespace Dictionary
         {
             base.OnInspectorGUI();
 
-            DictionaryData data = (DictionaryData)target;
-
-            GUILayout.Space(10);
-            
-            EditorGUILayout.LabelField("Dictionary Conversion Status", data.dictionaryConverted ? "Converted" : "Not Converted");
+            var data = (DictionaryData)target;
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Convert Dictionary to List"))
-            {
-                data.ConvertDictionaryToList();
-            }
+            EditorGUILayout.LabelField("Dictionary Conversion Status",
+                data.dictionaryConverted ? "Converted" : "Not Converted");
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Convert Dictionary to List")) data.ConvertDictionaryToList();
         }
     }
 }

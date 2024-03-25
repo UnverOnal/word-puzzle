@@ -33,8 +33,6 @@ namespace Dictionary
             }
 
             dictionaryConverted = true;
-            Debug.Log("Dictionary converted to list. Word count: " + DictionaryWords.Count);
-            Debug.Log("Minimum Word Size : " + minimumWordSize);
         }
 
         private void CalculateMinimumWordSize(string word)
