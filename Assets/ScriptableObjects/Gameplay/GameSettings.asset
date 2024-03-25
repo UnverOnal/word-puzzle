@@ -17,5 +17,7 @@ MonoBehaviour:
   formingAreaOffset: {x: 0, y: 37.5, z: 0}
   formingAreaSize: 7
   moveData:
-    speed: 50
-    ease: 28
+    speed: 225
+    ease: 1
+  intensity: 0.3
+  duration: 0.3

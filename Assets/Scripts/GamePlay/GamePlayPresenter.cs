@@ -15,28 +15,31 @@ namespace GamePlay
     public class GamePlayPresenter : IDisposable
     {
         [Inject] private readonly IInputService _inputService;
-        [Inject] private IPoolService _poolService;
-        [Inject] private GameSettings _gameSettings;
+        [Inject] private readonly IPoolService _poolService;
         [Inject] private readonly FormingAreaPresenter _formingAreaPresenter;
 
+        private readonly GameSettings _gameSettings;
         private readonly CommandInvoker _commandInvoker;
         private readonly LevelPresenter _levelPresenter;
         private readonly WordDictionary _wordDictionary;
 
         private readonly GamePlayModel _gamePlayModel;
+        private readonly GamePlayView _gamePlayView;
         private readonly PossibleMoveTracker _possibleMoveTracker;
 
         private ObjectPool<MoveCommand> _moveCommandPool;
 
         [Inject]
         public GamePlayPresenter(ICommandService commandService,
-            LevelPresenter levelPresenter, WordDictionary wordDictionary)
+            LevelPresenter levelPresenter, WordDictionary wordDictionary, GameSettings gameSettings)
         {
             _commandInvoker = commandService.GetCommandInvoker();
             _levelPresenter = levelPresenter;
             _wordDictionary = wordDictionary;
+            _gameSettings = gameSettings;
 
             _gamePlayModel = new GamePlayModel(levelPresenter);
+            _gamePlayView = new GamePlayView(_gameSettings);
 
             _possibleMoveTracker = new PossibleMoveTracker(wordDictionary);
         }
@@ -76,10 +79,11 @@ namespace GamePlay
             _gamePlayModel.AddTile(letter);
         }
 
-        public void UndoAll()
+        public async void OnWrongWord()
         {
-            _commandInvoker.UndoCommandAll();
             var letters = _formingAreaPresenter.TakeLetterAll();
+            await _gamePlayView.Vibrate(letters);
+            _commandInvoker.UndoCommandAll();
             _gamePlayModel.AddTiles(letters);
         }
 
@@ -88,7 +92,7 @@ namespace GamePlay
             var isWordCorrect = _wordDictionary.ContainsWord(_formingAreaPresenter.Word);
 
             if (!isWordCorrect)
-                UndoAll();
+                OnWrongWord();
             else
             {
                 _commandInvoker.Reset();
