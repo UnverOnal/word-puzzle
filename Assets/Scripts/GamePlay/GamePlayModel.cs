@@ -7,11 +7,13 @@ namespace GamePlay
 {
     public class GamePlayModel
     {
+        public List<LetterTile> WrongTiles { get; }
         public List<LetterTile> Tiles { get; }
         
         public GamePlayModel(LevelPresenter levelPresenter)
         {
             Tiles = levelPresenter.Tiles;
+            WrongTiles = new List<LetterTile>();
         }
 
         public void AddTile(LetterTile tile)
@@ -29,9 +31,16 @@ namespace GamePlay
             Tiles.Remove(tile);
         }
 
+        public void AddWrongTiles(IEnumerable<LetterTile> tiles)
+        {
+            WrongTiles.Clear();
+            WrongTiles.AddRange(tiles);
+        }
+
         public void Reset()
         {
             Tiles.Clear();
+            WrongTiles.Clear();
         }
     }
 }

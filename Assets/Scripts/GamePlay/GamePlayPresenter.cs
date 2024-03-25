@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Dictionary;
 using GameManagement;
 using GamePlay.FormingArea;
@@ -79,20 +80,18 @@ namespace GamePlay
             _gamePlayModel.AddTile(letter);
         }
 
-        public async void OnWrongWord()
+        public void UndoAll()
         {
-            var letters = _formingAreaPresenter.TakeLetterAll();
-            await _gamePlayView.Vibrate(letters);
+            GetLettersBack();
             _commandInvoker.UndoCommandAll();
-            _gamePlayModel.AddTiles(letters);
         }
 
-        public void Submit()
+        public async void Submit()
         {
             var isWordCorrect = _wordDictionary.ContainsWord(_formingAreaPresenter.Word);
 
             if (!isWordCorrect)
-                OnWrongWord();
+                await OnWrongSubmit();
             else
             {
                 _commandInvoker.Reset();
@@ -112,6 +111,20 @@ namespace GamePlay
                 _levelPresenter.ReturnTile(_gamePlayModel.Tiles);
                 _gamePlayModel.Reset();
             }
+        }
+
+        private async UniTask OnWrongSubmit()
+        {
+            GetLettersBack();
+            await _gamePlayView.Vibrate(_gamePlayModel.WrongTiles);
+            _commandInvoker.UndoCommandAll();
+        }
+
+        private void GetLettersBack()
+        {
+            var letters = _formingAreaPresenter.TakeLetterAll();
+            _gamePlayModel.AddWrongTiles(letters);
+            _gamePlayModel.AddTiles(letters);
         }
 
         private LetterTile GetSelectedTile(GameObject gameObject)

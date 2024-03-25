@@ -57,14 +57,14 @@ namespace UI.Screens.Game
         private void SubscribeButtons()
         {
             _resources.undoButton.OnClick += _gamePlayPresenter.Undo;
-            _resources.undoButton.OnHold += _gamePlayPresenter.OnWrongWord;
+            _resources.undoButton.OnHold += _gamePlayPresenter.UndoAll;
             _resources.submitButton.onClick.AddListener(_gamePlayPresenter.Submit);
         }
 
         private void UnsubscribeButtons()
         {
             _resources.undoButton.OnClick -= _gamePlayPresenter.Undo;
-            _resources.undoButton.OnHold -= _gamePlayPresenter.OnWrongWord;
+            _resources.undoButton.OnHold -= _gamePlayPresenter.UndoAll;
             _resources.submitButton.onClick.RemoveListener(_gamePlayPresenter.Submit);
         }
 
