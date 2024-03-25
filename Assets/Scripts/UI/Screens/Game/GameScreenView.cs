@@ -18,7 +18,7 @@ namespace UI.Screens.Game
             var scoreText = "Score : " + score;
             _resources.inGameScore.text = scoreText;
         }
-
+        
         public void SetLevelTitle()
         {
             var title = _levelPresenter.LevelCreationData?.title;

@@ -19,11 +19,13 @@ namespace GamePlay.TileSystem
 
         private readonly SpriteRenderer _spriteRenderer;
         private readonly TextMeshProUGUI _charText;
+        private readonly Vector3 _defaultScale;
 
         public LetterTile(GameObject tilePrefab, Transform poolTransform)
         {
             GameObject = Object.Instantiate(tilePrefab, poolTransform);
-            _charText = GameObject.GetComponentInChildren<TextMeshProUGUI>();
+            _defaultScale = GameObject.transform.localScale;
+                _charText = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
         }
 
@@ -42,6 +44,7 @@ namespace GamePlay.TileSystem
         public override void Reset()
         {
             _charText.text = string.Empty;
+            GameObject.transform.localScale = _defaultScale;
             GameObject.transform.position = Vector3.zero;
             GameObject.SetActive(false);
             _childrenTiles.Clear();

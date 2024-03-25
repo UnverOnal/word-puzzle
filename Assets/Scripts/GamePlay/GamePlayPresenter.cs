@@ -88,14 +88,15 @@ namespace GamePlay
 
         public async void Submit()
         {
-            var isWordCorrect = _wordDictionary.ContainsWord(_formingAreaPresenter.Word);
+            var word = _formingAreaPresenter.Word;
+            var isWordCorrect = _wordDictionary.ContainsWord(word) && !_formingAreaPresenter.IsAlreadyGiven(word);
 
             if (!isWordCorrect)
                 await OnWrongSubmit();
             else
             {
                 _commandInvoker.Reset();
-                _formingAreaPresenter.SubmitWord();
+                await _formingAreaPresenter.SubmitWord();
             }
 
             // Returns commands to the pool

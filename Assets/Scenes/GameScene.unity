@@ -1678,7 +1678,6 @@ MonoBehaviour:
   submitButton: {fileID: 2002105860}
   inGameScore: {fileID: 642404187}
   levelTitleText: {fileID: 1104721050}
-  correctWordsParent: {fileID: 2099944764}
   levelEndResources: {fileID: 581893295}
 --- !u!225 &833979727
 CanvasGroup:
@@ -3345,7 +3344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2099944764
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3386,10 +3385,10 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 250, y: 60}
+  m_CellSize: {x: 188.84, y: 60}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
-  m_ConstraintCount: 2
+  m_ConstraintCount: 3
 --- !u!114 &2099944766
 MonoBehaviour:
   m_ObjectHideFlags: 0

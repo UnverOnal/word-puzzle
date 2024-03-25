@@ -21,6 +21,7 @@ namespace GamePlay.FormingArea
         private readonly IDataStorageService _dataStorageService;
 
         private readonly FormingAreaModel _formingAreaModel;
+        private readonly FormingAreaView _formingAreaView;
 
         [Inject]
         public FormingAreaPresenter(LevelPresenter levelPresenter,
@@ -32,6 +33,7 @@ namespace GamePlay.FormingArea
             _dataStorageService = dataStorageService;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
+            _formingAreaView = new FormingAreaView();
         }
 
         public void AddLetter(LetterTile letterTile)
@@ -65,18 +67,16 @@ namespace GamePlay.FormingArea
             return position;
         }
 
-        public void SubmitWord()
+        public async UniTask SubmitWord()
         {
             _scorePresenter.CalculateScore(_formingAreaModel.CurrentWord);
-            DestroyWord();
+            await DestroyWord();
             _formingAreaModel.AddCurrentWord();
         }
 
         public async void OnLevelEnd(int remainingLetterCount)
         {
             _scorePresenter.CalculateTotalScore(remainingLetterCount);
-            // Debug.Log("Score : " + _scorePresenter.Score);
-            // Debug.Log("Level End");
 
             await UpdateLevelStatusData();
             _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);
@@ -84,15 +84,16 @@ namespace GamePlay.FormingArea
             _formingAreaModel.ResetWordsAll();
         }
 
-        private void DestroyWord()
+        public bool IsAlreadyGiven(string word)
+        {
+            return _formingAreaModel.CorrectWords.Contains(word);
+        }
+
+        private async UniTask DestroyWord()
         {
             var letters = _formingAreaModel.LetterTiles;
-            for (var i = 0; i < letters.Count; i++)
-            {
-                var letterTile = letters[i];
-                letterTile.GameObject.SetActive(false);
-                _levelPresenter.ReturnTile(letterTile);
-            }
+            await _formingAreaView.DestroyWord(letters);
+            _levelPresenter.ReturnTile(letters);
         }
 
         private async UniTask UpdateLevelStatusData()
