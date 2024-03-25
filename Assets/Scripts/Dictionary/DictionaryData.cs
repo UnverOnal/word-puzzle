@@ -15,12 +15,6 @@ namespace Dictionary
 
         public void ConvertDictionaryToList()
         {
-            if (dictionaryTextFile == null)
-            {
-                Debug.LogError("Dictionary text file is not assigned!");
-                return;
-            }
-
             DictionaryWords = new List<string>();
 
             var words = dictionaryTextFile.text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
