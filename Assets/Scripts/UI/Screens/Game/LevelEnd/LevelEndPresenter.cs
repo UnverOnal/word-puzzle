@@ -25,9 +25,6 @@ namespace UI.Screens.Game.LevelEnd
             _resources.tapToContinueButton.onClick.AddListener(()=>_statePresenter.UpdateGameState(GameState.GameState.LevelSelection));
         }
 
-        public void Close()
-        {
-            _resources.levelEndGameObject.SetActive(false);
-        }
+        public void Close() => _resources.levelEndGameObject.SetActive(false);
     }
 }

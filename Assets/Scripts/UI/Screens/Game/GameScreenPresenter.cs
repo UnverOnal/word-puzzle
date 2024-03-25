@@ -11,9 +11,10 @@ namespace UI.Screens.Game
     {
         [Inject] private readonly GamePlayPresenter _gamePlayPresenter;
 
+        private readonly GameScreenView _screenView;
+        
         private readonly GameScreenResources _resources;
         private readonly ScorePresenter _scorePresenter;
-        private readonly GameScreenView _screenView;
         private readonly LevelEndPresenter _levelEndPresenter;
 
         [Inject]
@@ -38,20 +39,30 @@ namespace UI.Screens.Game
             switch (gameState)
             {
                 case GameState.GameState.Game:
-                    _scorePresenter.Reset();
-                    _screenView.SetLevelTitle();
-                    _screenView.Enable();
-                    _resources.inGameObject.SetActive(true);
+                    OnGameStart();
                     break;
                 case GameState.GameState.LevelEnd:
-                    _resources.inGameObject.SetActive(false);
-                    _levelEndPresenter.Initialize();
+                    OnLevelEndStart();
                     break;
                 default:
                     _screenView.Disable();
                     _levelEndPresenter.Close();
                     break;
             }
+        }
+
+        private void OnGameStart()
+        {
+            _scorePresenter.Reset();
+            _screenView.SetLevelTitle();
+            _screenView.Enable();
+            _resources.inGameObject.SetActive(true);
+        }
+
+        private void OnLevelEndStart()
+        {
+            _resources.inGameObject.SetActive(false);
+            _levelEndPresenter.Initialize();
         }
 
         private void SubscribeButtons()
