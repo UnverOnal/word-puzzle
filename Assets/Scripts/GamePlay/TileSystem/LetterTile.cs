@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using LevelCreation;
 using Services.DataStorageService;
 using TMPro;
@@ -125,7 +126,7 @@ namespace GamePlay.TileSystem
         private void MakeInteractable(bool canInteract)
         {
             var color = canInteract ? Color.white : (Color.gray + Color.white)/2f;
-            _spriteRenderer.color = color;
+            _spriteRenderer.DOColor(color, 0.25f);
             var layer = canInteract ? LayerMask.NameToLayer("Tile") : LayerMask.NameToLayer("Default");
             GameObject.layer = layer;
         }

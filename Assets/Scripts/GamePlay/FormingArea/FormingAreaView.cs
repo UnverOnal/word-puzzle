@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GamePlay.TileSystem;
+using UnityEngine;
 
 namespace GamePlay.FormingArea
 {
@@ -14,7 +15,8 @@ namespace GamePlay.FormingArea
             {
                 var tile = tiles[i];
                 var transform = tile.GameObject.transform;
-                var task = transform.DOScale(0f, 0.35f).SetEase(Ease.InBack).ToUniTask();
+                var targetValue = new Vector3(0f, 0f, transform.localScale.z);
+                var task = transform.DOScale(targetValue, 0.35f).SetEase(Ease.InBack).ToUniTask();
                 tasks.Add(task);
             }
 
