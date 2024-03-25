@@ -27,7 +27,7 @@ namespace UI.Screens.LevelSelection
             _resources = (LevelScreenResources)screenResources;
             
             _playButtons = new Dictionary<GameObject, int>();
-            _levelUis = new GameObject[levelPresenter.LevelDatas.Count];
+            _levelUis = new GameObject[levelPresenter.LevelCreationDatas.Count];
             _levelUiResources = new LevelUiResources[_levelUis.Length];
         }
 

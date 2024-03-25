@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using GameManagement;
 using GamePlay.TileSystem;
 using UnityEngine;
@@ -24,20 +23,13 @@ namespace LevelCreation
 
         public void AlignCamera(IReadOnlyList<Tile> tiles)
         {
-            // var tiles = levelCreationData.tiles;
-            // var orderedTiles = tiles.OrderBy(data => data.position.x).ToList();
-            UpdateCamera(tiles);
-        }
-        
-        private void UpdateCamera(IReadOnlyList<Tile> tiles)
-        {
             _bounds = CalculateBounds(tiles);
 
-            var cameraPosition = CalculateCameraPosition(_bounds);
+            var cameraPosition = _bounds.center;
             var orthographicSize = CalculateOrthographicSize(_bounds);
             SetCamera(cameraPosition, orthographicSize);
         }
-        
+
         private Bounds CalculateBounds(IReadOnlyList<Tile> tiles)
         {
             var minPosition = tiles[0].Position;
@@ -59,12 +51,6 @@ namespace LevelCreation
                 max = maxPosition
             };
             return bounds;
-        }
-        
-        private Vector2 CalculateCameraPosition(Bounds bounds)
-        {
-            Vector2 center = bounds.center;
-            return center;
         }
         
         private float CalculateOrthographicSize(Bounds bounds)

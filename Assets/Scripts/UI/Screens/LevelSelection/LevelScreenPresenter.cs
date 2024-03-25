@@ -16,7 +16,7 @@ namespace UI.Screens.LevelSelection
             LevelScreenAssets levelScreenAssets, GameStatePresenter statePresenter, LevelPresenter levelPresenter,
             IDataStorageService dataStorageService) : base(statePresenter)
         {
-            _levelScreenModel = new LevelScreenModel(levelPresenter.LevelDatas, dataStorageService);
+            _levelScreenModel = new LevelScreenModel(levelPresenter.LevelCreationDatas, dataStorageService);
 
             _screenView =
                 new LevelScreenView(resources, levelScreenAssets.levelUiPrefab, statePresenter, levelPresenter);

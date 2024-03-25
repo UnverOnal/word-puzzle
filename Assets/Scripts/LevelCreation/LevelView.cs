@@ -8,21 +8,13 @@ namespace LevelCreation
     public class LevelView
     {
         private readonly GameSettings _gameSettings;
-        private readonly LevelAssets _levelAssets;
-        private readonly Transform _emptyTileParent;
 
-        public LevelView(GameSettings gameSettings, LevelAssets levelAssets)
+        public LevelView(GameSettings gameSettings)
         {
             _gameSettings = gameSettings;
-            _levelAssets = levelAssets;
-
-            _emptyTileParent = new GameObject("FormingArea").transform;
         }
 
-        public void SetTile(LetterTile letterTile)
-        {
-            letterTile.Initialize();
-        }
+        public void SetTile(LetterTile letterTile) => letterTile.Initialize();
 
         public void SetFormingArea(Vector3 initialPosition, List<BlankTile> blankTiles)
         {

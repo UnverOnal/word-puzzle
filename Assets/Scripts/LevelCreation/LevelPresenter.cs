@@ -10,14 +10,15 @@ namespace LevelCreation
 {
     public class LevelPresenter
     {
-        private readonly GameSettings _gameSettings;
         public int CurrentLevelIndex { get; private set; }
-        public List<LevelCreationData> LevelDatas => _levelModel.LevelCreationDatas;
+        public List<LevelCreationData> LevelCreationDatas => _levelModel.LevelCreationDatas;
         public LevelCreationData LevelCreationData { get; private set; }
 
         public List<LetterTile> Tiles => _levelModel.LetterTiles;
         public List<BlankTile> FormingTiles => _levelModel.FormingTiles;
 
+        private readonly GameSettings _gameSettings;
+        
         private ObjectPool<LetterTile> _letterTilePool;
         private ObjectPool<BlankTile> _blankTilePool;
 
@@ -32,7 +33,7 @@ namespace LevelCreation
         {
             _gameSettings = gameSettings;
             _levelModel = new LevelModel(fileConversionService, levelAssets);
-            _levelView = new LevelView(gameSettings, levelAssets);
+            _levelView = new LevelView(gameSettings);
             _levelFitter = new LevelFitter(gameSettings);
 
             _levelModel.CreateLevelCreationData();
@@ -61,7 +62,13 @@ namespace LevelCreation
             CreateFormingArea();
         }
 
-        public void ReturnTile(Tile tile)
+        public void ReturnTile(IEnumerable<Tile> tiles)
+        {
+            foreach (var tile in tiles)
+                ReturnTile(tile);
+        }
+        
+        private void ReturnTile(Tile tile)
         {
             tile.Reset();
 
@@ -70,12 +77,6 @@ namespace LevelCreation
                 _letterTilePool.Return((LetterTile)tile);
             else
                 _blankTilePool.Return((BlankTile)tile);
-        }
-        
-        public void ReturnTile(IEnumerable<Tile> tiles)
-        {
-            foreach (var tile in tiles)
-                ReturnTile(tile);
         }
 
         private void CreateFormingArea()
