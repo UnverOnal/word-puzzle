@@ -19,6 +19,7 @@ namespace Dictionary
 
         public void Initialize()
         {
+            _data.ConvertDictionaryToList();
             var words = _data.DictionaryWords;
             _wordHashSet = new HashSet<string>(words.Select(word => word.ToLower()));
         }

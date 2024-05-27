@@ -8,7 +8,6 @@ namespace Dictionary
     public class DictionaryData : ScriptableObject
     {
         [SerializeField] private TextAsset dictionaryTextFile;
-        [HideInInspector] public bool dictionaryConverted;
         [HideInInspector] public int minimumWordSize = int.MaxValue;
 
         public List<string> DictionaryWords { get; private set; }
@@ -25,8 +24,6 @@ namespace Dictionary
                 DictionaryWords.Add(word.Trim());
                 CalculateMinimumWordSize(word);
             }
-
-            dictionaryConverted = true;
         }
 
         private void CalculateMinimumWordSize(string word)
@@ -34,13 +31,5 @@ namespace Dictionary
             if (minimumWordSize > word.Length)
                 minimumWordSize = word.Length;
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (DictionaryWords == null || DictionaryWords.Count == 0)
-                ConvertDictionaryToList();
-        }
-#endif
     }
 }
