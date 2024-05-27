@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using GameManagement;
 using GamePlay.Score;
 using GamePlay.TileSystem;
 using GameState;
@@ -18,6 +19,7 @@ namespace GamePlay.FormingArea
 
         [Inject] private readonly ScorePresenter _scorePresenter;
         [Inject] private readonly GameStatePresenter _gameStatePresenter;
+        [Inject] private readonly GameSettings _gameSettings;
         
         private readonly LevelPresenter _levelPresenter;
         private readonly IDataStorageService _dataStorageService;
@@ -71,6 +73,13 @@ namespace GamePlay.FormingArea
             _gameStatePresenter.UpdateGameState(GameState.GameState.LevelEnd);
             _levelPresenter.ReturnTile(_formingAreaModel.FormingTiles);
             _formingAreaModel.ResetWordsAll();
+        }
+
+        public bool IsFull()
+        {
+            var areaSize = _gameSettings.formingAreaSize;
+            var occupiedSize = _formingAreaModel.LetterTiles.Count;
+            return occupiedSize >= areaSize;
         }
 
         private async UniTask UpdateLevelData()

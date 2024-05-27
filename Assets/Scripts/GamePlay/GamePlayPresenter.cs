@@ -57,6 +57,12 @@ namespace GamePlay
             if (selectedObject.layer != LayerMask.NameToLayer("Tile"))
                 return;
 
+            if (_formingAreaPresenter.IsFull())
+            {
+                _gamePlayView.VibrateTile(selectedObject.transform);
+                return;
+            }
+
             var tile = GetSelectedTile(selectedObject);
             MoveLetter(tile);
         }

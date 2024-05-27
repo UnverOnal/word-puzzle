@@ -29,7 +29,7 @@ namespace GamePlay
             await UniTask.WhenAll(tasks);
         }
 
-        private async UniTask VibrateTile(Transform transform)
+        public async UniTask VibrateTile(Transform transform)
         {
             var originalPosition = transform.position;
             float elapsedTime = 0f;
