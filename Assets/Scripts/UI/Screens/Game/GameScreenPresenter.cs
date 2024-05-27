@@ -29,9 +29,11 @@ namespace UI.Screens.Game
 
         public void Initialize()
         {
+            UpdateButtonStatus(false);
             SetStateAction();
             SubscribeButtons();
             _scorePresenter.OnScoreUpdated += _screenView.SetScore;
+            _gamePlayPresenter.OnMoveCommand += UpdateButtonStatus;
         }
 
         protected override void OnStateUpdate(GameState.GameState gameState)
@@ -49,6 +51,13 @@ namespace UI.Screens.Game
                     _levelEndPresenter.Close();
                     break;
             }
+        }
+        
+        //Update undo and submit buttons
+        private void UpdateButtonStatus(bool active)
+        {
+            _resources.undoButton.SetInteractable(active);
+            _resources.submitButton.interactable = active;
         }
 
         private void OnGameStart()
@@ -84,6 +93,7 @@ namespace UI.Screens.Game
             base.Dispose();
             UnsubscribeButtons();
             _scorePresenter.OnScoreUpdated -= _screenView.SetScore;
+            _gamePlayPresenter.OnMoveCommand -= UpdateButtonStatus;
         }
     }
 }

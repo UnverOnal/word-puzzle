@@ -15,6 +15,8 @@ namespace GamePlay
 {
     public class GamePlayPresenter : IDisposable
     {
+        public event Action<bool> OnMoveCommand; 
+
         [Inject] private readonly IInputService _inputService;
         [Inject] private readonly IPoolService _poolService;
         [Inject] private readonly FormingAreaPresenter _formingAreaPresenter;
@@ -77,6 +79,8 @@ namespace GamePlay
 
             _formingAreaPresenter.AddLetter(tile);
             _gamePlayModel.RemoveTile(tile);
+            
+            OnMoveCommand?.Invoke(_commandInvoker.undoStack.Count > 0);
         }
 
         public void Undo()
@@ -84,12 +88,14 @@ namespace GamePlay
             _commandInvoker.UndoCommand();
             var letter = _formingAreaPresenter.TakeLetter();
             _gamePlayModel.AddTile(letter);
+            OnMoveCommand?.Invoke(_commandInvoker.undoStack.Count > 0);
         }
 
         public void UndoAll()
         {
             GetLettersBack();
             _commandInvoker.UndoCommandAll();
+            OnMoveCommand?.Invoke(_commandInvoker.undoStack.Count > 0);
         }
 
         public async void Submit()
@@ -105,13 +111,17 @@ namespace GamePlay
                 await _formingAreaPresenter.SubmitWord();
             }
 
-            // Returns commands to the pool
+            ReturnCommandsToPool();
+            _formingAreaPresenter.Reset();
+            CheckLevelEnd();
+        }
+
+        private void ReturnCommandsToPool()
+        {
             while (_commandInvoker.Commands.Count > 0)
                 _moveCommandPool.Return((MoveCommand)_commandInvoker.Commands.Pop());
-
-            _formingAreaPresenter.Reset();
-
-            CheckLevelEnd();
+            _commandInvoker.Reset();
+            OnMoveCommand?.Invoke(_commandInvoker.undoStack.Count > 0);
         }
 
         private void CheckLevelEnd()

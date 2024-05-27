@@ -6,9 +6,9 @@ public class CommandInvoker
 {
     public Stack<ICommand> Commands { get; }
     
-    private readonly Stack<ICommand> _undoStack = new();
+    public readonly Stack<ICommand> undoStack = new();
 
-    private readonly Stack<ICommand> _redoStack = new();
+    public readonly Stack<ICommand> redoStack = new();
 
     public CommandInvoker()
     {
@@ -18,17 +18,17 @@ public class CommandInvoker
     public void ExecuteCommand(ICommand command)
     {
         command.Execute();
-        _undoStack.Push(command);
+        undoStack.Push(command);
 
-        _redoStack.Clear();
+        redoStack.Clear();
     }
 
     public void UndoCommand()
     {
-        if (_undoStack.Count > 0)
+        if (undoStack.Count > 0)
         {
-            var activeCommand = _undoStack.Pop();
-            _redoStack.Push(activeCommand);
+            var activeCommand = undoStack.Pop();
+            redoStack.Push(activeCommand);
             Commands.Push(activeCommand);
             activeCommand.Undo();
         }
@@ -36,16 +36,16 @@ public class CommandInvoker
     
     public void UndoCommandAll()
     {
-        while (_undoStack.Count > 0)
+        while (undoStack.Count > 0)
             UndoCommand();
     }
 
     public void RedoCommand()
     {
-        if (_redoStack.Count > 0)
+        if (redoStack.Count > 0)
         {
-            var activeCommand = _redoStack.Pop();
-            _undoStack.Push(activeCommand);
+            var activeCommand = redoStack.Pop();
+            undoStack.Push(activeCommand);
             Commands.Push(activeCommand);
             activeCommand.Execute();
         }
@@ -53,8 +53,9 @@ public class CommandInvoker
 
     public void Reset()
     {
-        _undoStack.Clear();
-        _redoStack.Clear();
+        Commands.Clear();
+        undoStack.Clear();
+        redoStack.Clear();
     }
 }
 }
