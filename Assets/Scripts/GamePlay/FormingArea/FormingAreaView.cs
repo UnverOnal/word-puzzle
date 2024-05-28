@@ -16,7 +16,7 @@ namespace GamePlay.FormingArea
                 var tile = tiles[i];
                 var transform = tile.GameObject.transform;
                 var targetValue = new Vector3(0f, 0f, transform.localScale.z);
-                var task = transform.DOScale(targetValue, 0.35f).SetEase(Ease.InBack).ToUniTask();
+                var task = transform.DOScale(targetValue, 0.25f).SetEase(Ease.InBack).ToUniTask();
                 tasks.Add(task);
             }
 
