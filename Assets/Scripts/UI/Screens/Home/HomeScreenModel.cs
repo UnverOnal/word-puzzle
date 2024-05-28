@@ -3,17 +3,18 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using LevelCreation;
 using Services.DataStorageService;
+using UI.Screens.Home.Level;
 
-namespace UI.Screens.LevelSelection
+namespace UI.Screens.Home
 {
-    public class LevelScreenModel
+    public class HomeScreenModel
     {
         public List<LevelDisplayData> LevelDisplayDatas { get; private set; }
 
         private readonly List<LevelCreationData> _levelCreationDatas;
         private readonly IDataStorageService _dataStorageService;
 
-        public LevelScreenModel(List<LevelCreationData> levelCreationDatas, IDataStorageService dataStorageService)
+        public HomeScreenModel(List<LevelCreationData> levelCreationDatas, IDataStorageService dataStorageService)
         {
             _levelCreationDatas = levelCreationDatas;
             _dataStorageService = dataStorageService;

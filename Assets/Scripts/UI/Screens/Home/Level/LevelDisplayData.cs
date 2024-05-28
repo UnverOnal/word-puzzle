@@ -1,4 +1,4 @@
-namespace UI.Screens.LevelSelection
+namespace UI.Screens.Home.Level
 {
     public enum PlayStatus
     {

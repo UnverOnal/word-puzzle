@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Screens.LevelSelection
+namespace UI.Screens.Home.Level
 {
     public class LevelUiResources : MonoBehaviour
     {

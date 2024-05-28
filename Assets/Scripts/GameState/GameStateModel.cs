@@ -4,7 +4,6 @@ namespace GameState
     {
         Home,
         Game,
-        LevelSelection,
         LevelEnd
     }
     

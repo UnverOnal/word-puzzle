@@ -1,9 +1,9 @@
-using UnityEngine.UI;
+using UnityEngine;
 
 namespace UI.Screens.Home
 {
     public class HomeScreenResources : ScreenResources
     {
-        public Button levelsButton;
+        public Transform contentTransform;
     }
 }

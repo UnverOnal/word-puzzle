@@ -22,7 +22,7 @@ namespace UI.Screens.Game.LevelEnd
         {
             _resources.levelEndGameObject.SetActive(true);
             _levelEndView.SetScore(_levelEndModel.Score, _levelEndModel.IsHighScore);
-            _resources.tapToContinueButton.onClick.AddListener(()=>_statePresenter.UpdateGameState(GameState.GameState.LevelSelection));
+            _resources.tapToContinueButton.onClick.AddListener(()=>_statePresenter.UpdateGameState(GameState.GameState.Home));
         }
 
         public void Close() => _resources.levelEndGameObject.SetActive(false);

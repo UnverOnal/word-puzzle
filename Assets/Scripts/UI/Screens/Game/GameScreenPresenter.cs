@@ -3,6 +3,7 @@ using GamePlay.Score;
 using GameState;
 using LevelCreation;
 using UI.Screens.Game.LevelEnd;
+using UnityEngine;
 using VContainer;
 
 namespace UI.Screens.Game

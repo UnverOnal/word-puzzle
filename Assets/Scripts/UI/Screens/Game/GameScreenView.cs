@@ -15,7 +15,7 @@ namespace UI.Screens.Game
 
         public void SetScore(int score)
         {
-            var scoreText = "Score : " + score;
+            var scoreText = score.ToString();
             _resources.inGameScore.text = scoreText;
         }
         
