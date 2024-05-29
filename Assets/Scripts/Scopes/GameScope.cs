@@ -1,6 +1,7 @@
 using GameManagement;
 using GamePlay;
 using GamePlay.FormingArea;
+using GamePlay.ParticleManagement;
 using GamePlay.Score;
 using GameState;
 using LevelCreation;
@@ -23,6 +24,7 @@ namespace Scopes
         [SerializeField] private LevelScreenAssets levelScreenAssets;
         [SerializeField] private LevelAssets levelAssets;
         [SerializeField] private ScoreData scoreData;
+        [SerializeField] private ParticleData particleData;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -30,6 +32,7 @@ namespace Scopes
             builder.Register<UiManager>(Lifetime.Singleton);
             
             RegisterScreens(builder);
+            RegisterParticleSystem(builder);
 
             builder.RegisterInstance(levelAssets);
             builder.Register<LevelPresenter>(Lifetime.Singleton);
@@ -50,6 +53,12 @@ namespace Scopes
 
             builder.RegisterInstance(gameScreenResources);
             builder.Register<GameScreenPresenter>(Lifetime.Singleton).AsSelf().As<IScreenPresenter>();
+        }
+
+        private void RegisterParticleSystem(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(particleData);
+            builder.Register<ParticleManager>(Lifetime.Singleton);
         }
     }
 }

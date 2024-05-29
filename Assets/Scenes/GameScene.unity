@@ -337,6 +337,7 @@ MonoBehaviour:
   levelScreenAssets: {fileID: 11400000, guid: 3bbd68d9168ba68419e952099626ef38, type: 2}
   levelAssets: {fileID: 11400000, guid: 7e48417b53c97b24abef3cc19f5a678e, type: 2}
   scoreData: {fileID: 11400000, guid: 8579a5fdb62a7b84787e5747b649ec5e, type: 2}
+  particleData: {fileID: 11400000, guid: 91512144a7e6191488481c22672cc7b1, type: 2}
 --- !u!4 &253024634
 Transform:
   m_ObjectHideFlags: 0

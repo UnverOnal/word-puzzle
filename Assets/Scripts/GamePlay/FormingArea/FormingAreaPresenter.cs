@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameManagement;
+using GamePlay.ParticleManagement;
 using GamePlay.Score;
 using GamePlay.TileSystem;
 using GameState;
@@ -29,13 +30,13 @@ namespace GamePlay.FormingArea
 
         [Inject]
         public FormingAreaPresenter(LevelPresenter levelPresenter,
-            IDataStorageService dataStorageService)
+            IDataStorageService dataStorageService, ParticleManager particleManager)
         {
             _levelPresenter = levelPresenter;
             _dataStorageService = dataStorageService;
 
             _formingAreaModel = new FormingAreaModel(levelPresenter);
-            _formingAreaView = new FormingAreaView();
+            _formingAreaView = new FormingAreaView(particleManager);
         }
 
         public void Reset() => _formingAreaModel.ResetWord();
